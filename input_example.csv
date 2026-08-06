@@ -1,0 +1,13 @@
+company,domain,industry,contact_name,contact_title,contact_email,competitor_domain
+Klaviyo,klaviyo.com,marketing automation,,,,
+Braze,braze.com,customer engagement,,,,
+Samsara,samsara.com,fleet operations,Alex Example,Head of Support,alex@example.com,
+Fivetran,fivetran.com,data integration,,,,
+Workato,workato.com,integration platform,,,,
+Elastic,elastic.co,search and observability,,,,
+Gopuff,gopuff.com,consumer delivery,,,,
+DoorDash,doordash.com,food delivery,,,,
+Robinhood,robinhood.com,consumer fintech,Jordan Example,Support Operations Lead,jordan@example.com,
+Navan,navan.com,travel and expense,,,,
+Basecamp,basecamp.com,project management,,,,asana.com
+Infobip,infobip.com,communications platform,,,,twilio.com

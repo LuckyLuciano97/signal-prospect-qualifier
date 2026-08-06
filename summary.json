@@ -1,0 +1,35 @@
+{
+  "finished_at": "2026-08-06 11:18 UTC",
+  "input": "input_example.csv",
+  "companies": 12,
+  "bands": {
+    "PASS": 4,
+    "MAYBE": 2,
+    "FAIL": 6
+  },
+  "signals_total": 44,
+  "openers_drafted": 6,
+  "partial_coverage_companies": 12,
+  "modules": {
+    "site": true,
+    "hiring": true,
+    "reviews": true,
+    "competitive": true
+  },
+  "http": {
+    "network": 2,
+    "cache": 117,
+    "retries": 0,
+    "failures": 0,
+    "robots_disallowed": 24,
+    "blocked_403": 2
+  },
+  "llm": {
+    "model": "claude-opus-5",
+    "calls": 13,
+    "cache_hits": 4,
+    "input_tokens": 18747,
+    "output_tokens": 2901
+  },
+  "elapsed_seconds": 95.0
+}

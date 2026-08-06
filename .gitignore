@@ -1,0 +1,15 @@
+# Secrets
+.env
+
+# Fetched pages and model responses (local caches, cheap to rebuild)
+cache/
+.llm_cache/
+logs/
+
+# Real prospect lists with real contacts stay out of git. The committed
+# input_example.csv uses placeholder contacts only.
+input_*.csv
+!input_example.csv
+
+__pycache__/
+*.pyc
