@@ -36,7 +36,7 @@ OPENER_SCHEMA = {
     "additionalProperties": False,
 }
 
-OPENER_SYSTEM = """You draft the first one or two sentences of a cold email for Nexi Studio,
+OPENER_SYSTEM = """You draft the first one or two sentences of a cold email for Nexis Studio,
 a small automation studio. The user will write the rest and send it personally.
 
 You get the signals one research run found for one company. Rules, all hard:
@@ -44,7 +44,7 @@ You get the signals one research run found for one company. Rules, all hard:
 - Reference at least one actual signal by its content. "Noticed you have four
   open support roles and recent reviews mention waiting days for a reply" is
   the register. Generic compliments are forbidden.
-- Lead with their pain or the outcome, never with what Nexi Studio does or
+- Lead with their pain or the outcome, never with what Nexis Studio does or
   sells. Do not name the offer, do not pitch, do not include a call to action.
 - Never state anything that is not in the signals. If a fact is not in the
   list, it does not exist. No guesses about their size, growth, or revenue.

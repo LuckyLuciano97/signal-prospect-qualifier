@@ -7,7 +7,7 @@ evidenced reason to need what you sell, with the evidence attached and a
 personalized opening line drafted for each strong prospect. You review the
 list, pick who to contact, and send the emails yourself.
 
-Built as an internal tool for [Nexi Studio](mailto:support@nexistudio.dev)'s
+Built as an internal tool for [Nexis Studio](mailto:support@nexistudio.dev)'s
 own client acquisition (the offers it qualifies against: support triage
 agents, scrapers, data pipelines, workflow automation). The offer catalogue
 and every threshold live in `config.py`, so pointing it at a different
@@ -183,7 +183,7 @@ distribution sanity). Its verbatim output is committed as
 
 ## Working together
 
-Nexi Studio builds tools like this — scrapers with validation baked in,
+Nexis Studio builds tools like this — scrapers with validation baked in,
 data pipelines, support triage agents, and workflow automation with a
 human-in-the-loop where it matters. If you want your prospect list qualified
 by real buying signals, or the pipeline behind it built for your team:

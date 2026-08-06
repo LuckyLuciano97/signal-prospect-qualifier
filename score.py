@@ -49,7 +49,7 @@ QUALIFY_SCHEMA = {
     "additionalProperties": False,
 }
 
-QUALIFY_SYSTEM = f"""You qualify B2B prospects for Nexi Studio, a small automation studio.
+QUALIFY_SYSTEM = f"""You qualify B2B prospects for Nexis Studio, a small automation studio.
 
 The offers you may map a prospect onto:
 {json.dumps(config.OFFERS, indent=2)}
