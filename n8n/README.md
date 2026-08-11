@@ -166,10 +166,20 @@ return [{ json: { domain, robots_fetched: fetched, allows_crawl: allows,
 
 ### Find subpages
 
+Mode: **Run Once for All Items**. It has to be: this node turns one homepage
+into up to four subpage rows, and `Run Once for Each Item` requires exactly
+one returned object per item, so that mode fails at runtime with a "'json'
+property isn't an object" error.
+
+Because of that mode, `pairedItem` must be set by hand. n8n cannot infer item
+lineage through an all-items Code node, and the `Tag pages` node downstream
+resolves `$('Find subpages').item` through exactly that lineage — without it
+you get "Paired item data is unavailable" and `page_type` is lost again.
+
 ```javascript
 // Input: homepage HTML. Output: same-host about/services/careers/contact URLs.
 const domain = $('Loop Over Items').item.json.domain;
-const html = typeof $json.data === 'string' ? $json.data : '';
+const html = typeof $json.body === 'string' ? $json.body : ($json.data || '');
 const base = `https://${domain}`;
 
 const WANTED = {
@@ -196,7 +206,12 @@ while ((m = re.exec(html)) !== null) {
     }
   }
 }
-return Object.entries(found).map(([page_type, url]) => ({ json: { domain, page_type, url } }));
+// pairedItem is not decoration: it is what carries page_type across the
+// HTTP Request node further down. Batch size is 1, so index 0 is correct.
+return Object.entries(found).map(([page_type, url]) => ({
+  json: { domain, page_type, url },
+  pairedItem: { item: 0 },
+}));
 ```
 
 ### Assemble bundle
