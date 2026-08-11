@@ -35,12 +35,30 @@ companies, bundle mode produced **byte-identical evidence** to the live run
 for all 29. Look at a generated file before you build anything — it is the
 target your workflow has to hit.
 
-### 2. Decide where bundles land
+### 2. Decide how bundles get from n8n to Python
 
-Pick a directory n8n can write to and Python can read, e.g.
-`C:\signal\bundles`. Everything below writes there; `run.py --bundles` reads
-there. Bundles are worth keeping: re-scoring after a prompt or weight change
-then costs nothing and re-crawls nothing.
+**This depends on where n8n runs, and getting it wrong is the first thing
+that will stop you.**
+
+*Self-hosted n8n, same machine or a shared drive:* use
+`Read/Write Files from Disk` at both ends. Pick a directory, e.g.
+`C:\signal\bundles`; `run.py --bundles` reads it.
+
+*n8n Cloud:* the filesystem nodes cannot see your machine at all, in either
+direction. Reading `C:/...` fails and so does writing there. Use cloud
+storage as the drop point instead:
+
+| | Cloud-compatible choice |
+|---|---|
+| Prospect list in | **Google Sheets** (also editable from your phone) |
+| Bundles out | **Google Drive → Upload file**, one JSON per company |
+| Getting them local | Google Drive for Desktop syncs the folder; point `run.py --bundles` at the synced path, e.g. `"G:\My Drive\signal-bundles"` |
+
+`--bundles` takes any directory, so nothing in Python changes. Dropbox or
+S3 work the same way if you prefer them.
+
+Whichever transport you use, bundles are worth keeping: re-scoring after a
+prompt or weight change then costs nothing and re-crawls nothing.
 
 ### 3. Build the workflow
 
@@ -93,8 +111,11 @@ this order. Node names matter only where a Code node references them.
 11. **Code — assemble bundle** (below). Builds the exact JSON contract,
     including `coverage`.
 
-12. **Convert to File** (JSON → file) → **Read/Write Files from Disk**
-    (write), filename `={{ $json.domain }}.json` into your bundle directory.
+12. **Convert to File** (JSON → file), then whichever writer matches step 2:
+    - self-hosted: **Read/Write Files from Disk** (write), filename
+      `={{ $('Loop Over Items').item.json.domain }}.json`
+    - Cloud: **Google Drive → Upload file**, same expression as the name,
+      into a folder you sync down with Google Drive for Desktop
 
 ### 4. Score what it produced
 
