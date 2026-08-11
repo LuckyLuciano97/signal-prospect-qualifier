@@ -34,6 +34,7 @@ class CompanyResult:
     domain: str
     industry: str = ""
     team_size: str = ""   # user-supplied headcount; context for the qualifier, never gathered
+    location: str = ""    # user-supplied; disambiguates the Google Places lookup
     # Contact passthrough from the user's own export. Never gathered, never
     # enriched; it goes straight back out in results.csv untouched.
     contact_name: str = ""
@@ -52,6 +53,12 @@ class CompanyResult:
     # whichever is true.
     coverage: dict[str, str] = field(default_factory=dict)
     notes: list[str] = field(default_factory=list)
+
+    # Entity gate (gather/entity.py). is_target defaults True so a company is
+    # only ever removed by positive, quoted evidence that it is not a prospect.
+    is_target: bool = True
+    entity_type: str = "target"
+    entity_evidence: str = ""
 
     base_score: int = 0
     llm_adjustment: int = 0

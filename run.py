@@ -29,7 +29,7 @@ import config
 import personalize
 import report
 import score
-from gather import competitive, hiring, reviews, site
+from gather import competitive, entity, hiring, reviews, site
 from llm import AnthropicEngine, LLMError
 from model import CompanyResult
 from net import PoliteClient, setup_logging
@@ -46,6 +46,7 @@ HEADER_ALIASES = {
     "industry": "industry",
     "team size": "team_size", "team_size": "team_size", "employees": "team_size",
     "headcount": "team_size", "# employees": "team_size",
+    "location": "location", "city": "location",
     "contact name": "contact_name", "contact_name": "contact_name",
     "first name": "contact_name",
     "contact title": "contact_title", "contact_title": "contact_title",
@@ -93,11 +94,39 @@ def read_input(path: Path) -> list[CompanyResult]:
 
 def process(client: PoliteClient, engine: AnthropicEngine | None,
             result: CompanyResult, modules: dict[str, bool]) -> None:
-    facts: dict = {"careers_url": None, "board_hints": [], "chat_widget": None}
+    facts: dict = {"careers_url": None, "board_hints": [], "chat_widget": None,
+                   "homepage_text": ""}
     if modules["site"]:
         facts = site.gather(client, result)
     else:
         result.coverage["site"] = "skipped"
+
+    # The entity gate runs before anything else is gathered or scored: if this
+    # is a trade association or a publisher, the rest of the pipeline is wasted
+    # work and a wasted model call, and its output would be actively misleading.
+    if modules["entity"]:
+        entity.check(result, facts.get("homepage_text", ""), engine)
+        if not result.is_target:
+            result.band = "DISQUALIFIED"
+            score.weigh_only(result)  # the observations stay honest; the score does not exist
+            result.score = 0
+            result.offer = "unclear"
+            result.reasoning = (
+                f"Not a prospect: this is a {result.entity_type.replace('_', ' ')}, "
+                f"not an operating business of the target type. Evidence from its "
+                f"own homepage: \"{result.entity_evidence}\"")
+            return
+        if result.entity_type == "unclear":
+            result.band = "REVIEW"
+            score.weigh_only(result)
+            result.score = 0
+            result.offer = "unclear"
+            result.reasoning = ("Entity type could not be determined from the "
+                                "homepage; review what this company is before "
+                                "contacting it.")
+            return
+    else:
+        result.entity_type = "target"
 
     if modules["hiring"]:
         hiring.gather(client, result, careers_url=facts.get("careers_url"),
@@ -131,10 +160,15 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--no-reviews", action="store_true")
     ap.add_argument("--no-hiring", action="store_true")
     ap.add_argument("--no-competitive", action="store_true")
+    ap.add_argument("--no-entity", action="store_true",
+                    help="skip the entity disqualifier (scores everything)")
     ap.add_argument("--verbose", action="store_true")
     args = ap.parse_args(argv)
 
     setup_logging(config.LOG_DIR / "run.log", args.verbose)
+    # Load .env here, not just inside the LLM engine: the Google Places key
+    # must be visible even on --no-llm runs.
+    config.load_dotenv()
     modules = dict(config.MODULES)
     if args.no_reviews:
         modules["reviews"] = False
@@ -142,6 +176,8 @@ def main(argv: list[str] | None = None) -> int:
         modules["hiring"] = False
     if args.no_competitive:
         modules["competitive"] = False
+    if args.no_entity:
+        modules["entity"] = False
 
     results = read_input(args.input)
     if args.limit:
@@ -187,7 +223,7 @@ def main(argv: list[str] | None = None) -> int:
         for result in results:
             fh.write(json.dumps(result.as_record(), ensure_ascii=False) + "\n")
 
-    bands = {b: sum(1 for r in results if r.band == b) for b in ("PASS", "MAYBE", "FAIL")}
+    bands = {b: sum(1 for r in results if r.band == b) for b in config.BANDS}
     summary = {
         "finished_at": meta["finished_at"],
         "input": meta["input"],

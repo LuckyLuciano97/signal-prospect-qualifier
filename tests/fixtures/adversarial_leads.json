@@ -1,0 +1,51 @@
+{
+  "_comment": [
+    "Real cases from the batch-2 run of 2026-08-11, kept verbatim as the",
+    "regression test for the entity-gate defect. Three of these were ranked",
+    "as prospects before gather/entity.py existed; one is the control that",
+    "must NOT be disqualified.",
+    "Each `homepage_text` is an excerpt of the real fetched page text, so the",
+    "evidence_quote substring check is exercised against genuine copy."
+  ],
+  "cases": [
+    {
+      "company": "Big I Michigan",
+      "domain": "michagent.org",
+      "expect_is_target": false,
+      "expect_entity_type": "association",
+      "was_ranked": "16% FAIL (scored as a prospect)",
+      "homepage_text": "Home - Big I Michigan Skip to main content Sign in Contact Us Code of Conduct Toggle navigation About Us Big I Michigan Leadership Big I Michigan Committees NextGen Leaders of Michigan The Big I Michigan Team Big I Michigan Award Winners Membership Join or Renew Member Benefits Overview Supporting Partners Find a Member MI Future Foundation Genesee County Agents Bay Area Insurance Agents Association Oakland County Agents West Michigan Golf Outing Continuing Education Calendar of Programs & Events Education Programs Certified Insurance Counselor policy priorities and how to get involved. NextGen Leaders networking, leadership, and events. 2027 convention & trade show"
+    },
+    {
+      "company": "Underwriters Alliance of Indiana",
+      "domain": "uaii.net",
+      "expect_is_target": false,
+      "expect_entity_type": "network",
+      "was_ranked": "33% MAYBE, rank 4, with a drafted opener",
+      "homepage_text": "Welcome to Underwriters Alliance - Underwriters Alliance of Indiana, Inc About Us Our Team Local / Regional / National FAQs Events The SIAA Difference Our Business Market Access - Our Partners Benefits of Membership The SIAA Difference Your Agency Agency Growth Jumpstart your Agency Perpetuation Planning What Our Members Say Commercial Lines Events and Insights Careers Contact Us Welcome to Underwriters Alliance Expertise Independent Agencies Trust Independent insurance agencies in Indiana can depend on Underwriters Alliance of Indiana"
+    },
+    {
+      "company": "The Rough Notes Company",
+      "domain": "roughnotes.com",
+      "expect_is_target": false,
+      "expect_entity_type": "publisher",
+      "was_ranked": "30% MAYBE, rank 9, with a drafted opener",
+      "homepage_text": "Home - The Rough Notes Company Inc. Home About Publications RN Newsletter Products & Solutions Media Kits Contact Us Shop Catalog Enter Promo Code Pay Your Existing Bill Here From The Latest Issue Agency of the Month ALWAYS LOOKING FOR A BETTER WAY About us since 1878 more than a century ago, dr. henry c. martin published the first issue. In the early years Rough Notes magazine provided editorial commentary that helped to regulate the industry. Proudly serving the independent agency system since 1878."
+    },
+    {
+      "company": "Brown and Brown Insurance Agency",
+      "domain": "insurewithbb.com",
+      "expect_is_target": true,
+      "expect_entity_type": "target",
+      "was_ranked": "51% MAYBE, rank 1",
+      "_control": [
+        "This is the control case and the reason name-based blocklists are",
+        "banned in gather/entity.py. It shares a name with the national",
+        "brokerage Brown & Brown, but it is a 20-person independent agency in",
+        "Auburn, Indiana. Disqualifying it would throw away the best-evidenced",
+        "prospect in the run."
+      ],
+      "homepage_text": "Brown & Brown Insurance Agency - Personal & Business - Auburn, IN Visit Brown & Brown Insurance Agency, Inc. on Twitter Blog Client Portal Report a Claim Request Policy Change Request Certificate Auto ID Card Pay Insurance Bill Complete Review Refer a Friend Resources Clickable Coverage Insurance Glossary FAQs Call search Menu About We're Independent Meet the Team Insurance Partners Testimonials Personal Business Contact Get Quote Insurance solutions you can depend on At Brown & Brown Insurance, we combine local service with global reach. 309 S. Jackson Street Auburn, IN 46706"
+    }
+  ]
+}

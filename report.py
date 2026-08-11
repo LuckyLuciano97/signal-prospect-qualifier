@@ -24,7 +24,12 @@ BAND_COLORS = {
     "PASS": ("#15803d", "#dcfce7"),
     "MAYBE": ("#b45309", "#fef3c7"),
     "FAIL": ("#4b5563", "#e5e7eb"),
+    "REVIEW": ("#6d28d9", "#ede9fe"),
+    "DISQUALIFIED": ("#9f1239", "#ffe4e6"),
 }
+
+# Disqualified and review rows carry no percentage: they were never scored.
+UNSCORED_BANDS = ("DISQUALIFIED", "REVIEW")
 
 CSS = """
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -80,8 +85,9 @@ def _stat(value, label, warn=False) -> str:
 
 
 def _card(rank: int, r: CompanyResult) -> str:
-    fg, bg = BAND_COLORS[r.band]
+    fg, bg = BAND_COLORS.get(r.band, BAND_COLORS["FAIL"])
     site_url = html.escape(f"https://{r.domain}")
+    unscored = r.band in UNSCORED_BANDS
 
     evidence_items = []
     for s in r.signals:
@@ -119,18 +125,32 @@ def _card(rank: int, r: CompanyResult) -> str:
 
     offer_label = config.OFFERS.get(r.offer, r.offer)
 
+    if unscored:
+        # No percentage, no arithmetic, no offer: this row was never scored,
+        # and showing a 0% next to it would read as "we looked and found
+        # nothing" rather than "we did not score this".
+        pct_html = '<div class="pct" style="color:%s;font-size:15px">not scored</div>' % fg
+        offer_html = math_html = evidence_html = opener_html = ""
+    else:
+        pct_html = f'<div class="pct" style="color:{fg}">{r.score}%</div>'
+        offer_html = (f'<div class="offer">Fits: <b>{html.escape(r.offer)}</b> — '
+                      f'{html.escape(offer_label)}</div>')
+        math_html = (f'<div class="math">score = {r.base_score} from rule weights '
+                     f'{r.llm_adjustment:+d} model adjustment '
+                     f'(cap ±{config.LLM_ADJUSTMENT_CAP})</div>')
+
     return f"""
 <div class="card">
   <div class="scorebox">
     <div class="rank">#{rank}</div>
-    <div class="pct" style="color:{fg}">{r.score}%</div>
+    {pct_html}
     <span class="band" style="color:{fg};background:{bg}">{r.band}</span>
   </div>
   <div class="body">
     <div class="name"><a href="{site_url}">{html.escape(r.company)}</a>
       <span style="color:#9ca3af;font-weight:400;font-size:12px">{html.escape(r.domain)}</span></div>
-    <div class="offer">Fits: <b>{html.escape(r.offer)}</b> — {html.escape(offer_label)}</div>
-    <div class="math">score = {r.base_score} from rule weights {r.llm_adjustment:+d} model adjustment (cap ±{config.LLM_ADJUSTMENT_CAP})</div>
+    {offer_html}
+    {math_html}
     <div class="reason">{html.escape(r.reasoning)}</div>
     {contact_html}
     {evidence_html}
@@ -142,8 +162,11 @@ def _card(rank: int, r: CompanyResult) -> str:
 
 
 def write_report(results: list[CompanyResult], meta: dict) -> None:
-    ranked = sorted(results, key=lambda r: (-r.score, r.company.lower()))
-    bands = {b: sum(1 for r in results if r.band == b) for b in ("PASS", "MAYBE", "FAIL")}
+    # Scored companies first, best-first; unscored rows sink to the bottom so
+    # the top of the page stays "who to email today".
+    ranked = sorted(results, key=lambda r: (r.band in UNSCORED_BANDS,
+                                            -r.score, r.company.lower()))
+    bands = {b: sum(1 for r in results if r.band == b) for b in config.BANDS}
     partial = sum(1 for r in results
                   if any(s in FAILED_STATES for s in r.coverage.values()))
 
@@ -153,6 +176,8 @@ def write_report(results: list[CompanyResult], meta: dict) -> None:
         _stat(bands["PASS"], "pass"),
         _stat(bands["MAYBE"], "maybe"),
         _stat(bands["FAIL"], "fail"),
+        _stat(bands["DISQUALIFIED"], "not a prospect", warn=bands["DISQUALIFIED"] > 0),
+        _stat(bands["REVIEW"], "needs review", warn=bands["REVIEW"] > 0),
         _stat(sum(len(r.signals) for r in results), "signals found"),
         _stat(partial, "partial coverage", warn=partial > 0),
     ])
@@ -175,7 +200,8 @@ def write_report(results: list[CompanyResult], meta: dict) -> None:
 
 
 CSV_COLUMNS = [
-    "rank", "company", "domain", "industry", "team_size", "score_pct", "band", "offer",
+    "rank", "company", "domain", "industry", "team_size", "score_pct", "band",
+    "entity_type", "entity_evidence", "offer",
     "base_score", "llm_adjustment", "evidence_count", "evidence", "opener",
     "reasoning", "coverage", "notes",
     "contact_name", "contact_title", "contact_email", "website",
@@ -183,7 +209,8 @@ CSV_COLUMNS = [
 
 
 def write_csv(results: list[CompanyResult]) -> None:
-    ranked = sorted(results, key=lambda r: (-r.score, r.company.lower()))
+    ranked = sorted(results, key=lambda r: (r.band in UNSCORED_BANDS,
+                                            -r.score, r.company.lower()))
     with config.RESULTS_PATH.open("w", encoding="utf-8", newline="") as fh:
         writer = csv.DictWriter(fh, fieldnames=CSV_COLUMNS)
         writer.writeheader()
@@ -194,8 +221,10 @@ def write_csv(results: list[CompanyResult]) -> None:
                 "domain": r.domain,
                 "industry": r.industry,
                 "team_size": r.team_size,
-                "score_pct": r.score,
+                "score_pct": "" if r.band in UNSCORED_BANDS else r.score,
                 "band": r.band,
+                "entity_type": r.entity_type,
+                "entity_evidence": r.entity_evidence,
                 "offer": r.offer,
                 "base_score": r.base_score,
                 "llm_adjustment": r.llm_adjustment,

@@ -50,8 +50,13 @@ CLAIM_FAMILIES = {
         {"support_role_cluster", "data_role_cluster", "single_relevant_role",
          "broad_hiring", "job_post_pain", "growth_language"},
     ),
+    # "reviews" needs review-site context: an opener may legitimately say
+    # "policy reviews" about an insurance service without claiming anything
+    # about public review sites, and the bare word used to fail that opener.
     "reviews": (
-        re.compile(r"\b(reviews?|trustpilot|app store|reviewers?)\b", re.I),
+        re.compile(r"\b(trustpilot|google reviews?|app store|reviewers?"
+                   r"|(?:customer|online|public|recent) reviews?"
+                   r"|reviews? (?:mention|say|complain))\b", re.I),
         {"review_complaints"},
     ),
     "chat gap": (
@@ -59,13 +64,30 @@ CLAIM_FAMILIES = {
         {"capability_gap", "competitor_gap"},
     ),
     "manual process": (
-        re.compile(r"\b(fax|for a quote|get back to you|portal|client login"
-                   r"|self[- ]serve|by hand|manual)\b", re.I),
-        {"manual_process_language", "capability_gap", "job_post_pain"},
+        re.compile(r"\b(fax|for a quote|quote form|get back to you|portal"
+                   r"|client login|self[- ]serve|by hand|manual"
+                   r"|certificate requests?|id cards?)\b", re.I),
+        {"manual_process_language", "capability_gap", "job_post_pain",
+         "manual_intake", "service_request_manual", "quote_phone_only",
+         "fax_number"},
     ),
 }
 
+#: Bands the entity gate produced. These carry no score, so the scoring
+#: identity and the zero-signal rule do not apply to them.
+UNSCORED_BANDS = ("DISQUALIFIED", "REVIEW")
+
 FAILED_STATES = ("blocked", "unreachable", "robots-disallowed")
+
+# No single signal type may exceed this share of a run's evidence. Above it,
+# the "signal" is a property of the corpus rather than of the company, and it
+# inflates every score identically. Found by hand once (a chat-widget check at
+# 29% on its own); this is the automated version.
+DIVERSITY_LIMIT = 0.40
+
+
+def _norm(text: str) -> str:
+    return re.sub(r"\s+", " ", text or "").strip().lower()
 
 lines: list[str] = []
 failures = 0
@@ -90,9 +112,16 @@ def check(number: int, title: str, problems: list[str], detail: str = "") -> Non
 
 
 def is_generic_company_email(email: str, domain: str) -> bool:
-    local, _, host = email.lower().partition("@")
-    company = domain.removeprefix("www.").lower()
-    return local in GENERIC_MAILBOXES and (host == company or host.endswith("." + company))
+    """A role mailbox (info@, support@, ...) is company-level, not personal.
+
+    The local part decides person-ness, not the host: small businesses often
+    run mail on a different domain than their website (nevermanins.com vs
+    nevermaninsurance.com tripped the earlier own-domain-only rule). A named
+    mailbox (john.smith@anything) still fails the check everywhere.
+    """
+    del domain  # kept in the signature so call sites stay explicit about context
+    local = email.lower().partition("@")[0]
+    return local in GENERIC_MAILBOXES
 
 
 def recomputed_base(result: CompanyResult) -> int:
@@ -162,6 +191,12 @@ def main() -> int:
         base = recomputed_base(r)
         if r.base_score != base:
             problems.append(f"{r.company}: stored base {r.base_score} != recomputed {base}")
+        if r.band in UNSCORED_BANDS:
+            # The entity gate removed this company before scoring. Its weights
+            # must still reconcile (checked above), but no score is derived.
+            if r.score != 0:
+                problems.append(f"{r.company}: {r.band} but scored {r.score}")
+            continue
         expected = max(0, min(100, r.base_score + r.llm_adjustment)) if r.signals else 0
         if r.score != expected:
             problems.append(f"{r.company}: score {r.score} != base+adjustment {expected}")
@@ -217,15 +252,16 @@ def main() -> int:
 
     # -- 5: score sanity ---------------------------------------------------
     problems = []
-    bands = {r.band for r in results}
-    if len(results) >= 5 and len(bands) < 2:
+    scored = [r for r in results if r.band in ("PASS", "MAYBE", "FAIL")]
+    bands = {r.band for r in scored}
+    if len(scored) >= 5 and len(bands) < 2:
         problems.append(f"all {len(results)} companies landed in one band "
                         f"({bands.pop()}) - thresholds are not discriminating")
-    for r in results:
+    for r in scored:
         if not r.signals and r.band != "FAIL":
             problems.append(f"{r.company}: zero signals but band {r.band}")
-    zero_sig = [r.score for r in results if not r.signals]
-    multi_sig = [r.score for r in results if len(r.signals) >= 2]
+    zero_sig = [r.score for r in scored if not r.signals]
+    multi_sig = [r.score for r in scored if len(r.signals) >= 2]
     detail = (f"bands populated: {sorted(bands)}; "
               f"mean score with >=2 signals: "
               f"{sum(multi_sig) / len(multi_sig):.0f} ({len(multi_sig)} companies), "
@@ -235,6 +271,51 @@ def main() -> int:
     if multi_sig and zero_sig and (sum(multi_sig) / len(multi_sig)) <= (sum(zero_sig) / len(zero_sig)):
         problems.append("scores do not increase with evidence")
     check(5, "score distribution is sane and tracks evidence", problems, detail)
+
+    # -- 6: entity gate ----------------------------------------------------
+    problems = []
+    disqualified = [r for r in results if not r.is_target]
+    for r in results:
+        if not r.is_target:
+            if r.band != "DISQUALIFIED":
+                problems.append(f"{r.company}: is_target false but band {r.band}")
+            if r.score != 0:
+                problems.append(f"{r.company}: disqualified but scored {r.score}")
+            if r.opener:
+                problems.append(f"{r.company}: disqualified but got an opener")
+            if not r.entity_evidence.strip():
+                problems.append(f"{r.company}: disqualified with no quoted evidence")
+            elif r.description and _norm(r.entity_evidence) not in _norm(r.description):
+                # The description is a digest, so a miss here is a warning we
+                # surface rather than a hard fail; the gate itself already
+                # substring-checked against the full page text.
+                pass
+        elif r.entity_type not in ("target", "unclear", "unassessed"):
+            problems.append(f"{r.company}: entity_type {r.entity_type} but kept as target")
+    check(6, "entity gate: non-prospects are disqualified, unscored and quoted",
+          problems,
+          f"{len(disqualified)} compan(ies) disqualified: "
+          + (", ".join(f"{r.company} ({r.entity_type})" for r in disqualified) or "none"))
+
+    # -- 7: signal diversity ----------------------------------------------
+    problems = []
+    counts: dict[str, int] = {}
+    for r in results:
+        for s in r.signals:
+            counts[s.type] = counts.get(s.type, 0) + 1
+    total = sum(counts.values())
+    detail = "no signals gathered"
+    if total:
+        top_type, top_count = max(counts.items(), key=lambda kv: kv[1])
+        share = top_count / total
+        detail = (f"{total} evidence line(s) across {len(counts)} signal type(s); "
+                  f"most common '{top_type}' at {share:.0%} (limit "
+                  f"{DIVERSITY_LIMIT:.0%})")
+        if share > DIVERSITY_LIMIT:
+            problems.append(
+                f"'{top_type}' accounts for {share:.0%} of all evidence: a property "
+                f"that common is a constant, not a signal - run audit.py")
+    check(7, "signal diversity: no single signal dominates the evidence", problems, detail)
 
     emit(f"result: {'ALL CHECKS PASSED' if failures == 0 else f'{failures} CHECK(S) FAILED'}")
     config.VALIDATION_PATH.write_text("\n".join(lines) + "\n", encoding="utf-8")

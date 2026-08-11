@@ -48,238 +48,561 @@ h1 { font-size: 20px; margin-bottom: 2px; }
 </style></head>
 <body><div class="wrap">
 <h1>Signal — prospect qualification run</h1>
-<div class="sub">input_example.csv · 2026-08-11 00:22 UTC
+<div class="sub">input_all.csv · 2026-08-11 13:32 UTC
  · model: claude-opus-5
  · every score is the sum of the weighted signals listed under it; companies with no
  gathered evidence are 0% by construction, not judgement.</div>
-<div class="strip"><div class="stat"><b>12</b><span>companies</span></div><div class="stat"><b>0</b><span>pass</span></div><div class="stat"><b>2</b><span>maybe</span></div><div class="stat"><b>10</b><span>fail</span></div><div class="stat"><b>32</b><span>signals found</span></div><div class="stat coverage-warn"><b>12</b><span>partial coverage</span></div></div>
+<div class="strip"><div class="stat"><b>29</b><span>companies</span></div><div class="stat"><b>0</b><span>pass</span></div><div class="stat"><b>2</b><span>maybe</span></div><div class="stat"><b>22</b><span>fail</span></div><div class="stat coverage-warn"><b>3</b><span>not a prospect</span></div><div class="stat coverage-warn"><b>2</b><span>needs review</span></div><div class="stat"><b>48</b><span>signals found</span></div><div class="stat coverage-warn"><b>24</b><span>partial coverage</span></div></div>
 
 <div class="card">
   <div class="scorebox">
     <div class="rank">#1</div>
-    <div class="pct" style="color:#b45309">50%</div>
+    <div class="pct" style="color:#b45309">66%</div>
     <span class="band" style="color:#b45309;background:#fef3c7">MAYBE</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://jacobsinsurance.com">Jacobs Insurance Agency</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">jacobsinsurance.com</span></div>
+    <div class="name"><a href="https://burkhartinsurance.com">Burkhart Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">burkhartinsurance.com</span></div>
     <div class="offer">Fits: <b>triage_agent</b> — AI support triage agent (classifies, routes and drafts replies to support tickets)</div>
-    <div class="math">score = 48 from rule weights +2 model adjustment (cap ±15)</div>
-    <div class="reason">An 8-person independent agency with no chat widget or portal, a &quot;we&#x27;ll get back to you&quot; contact promise and a live fax number shows inbound quote/service requests are handled by hand with no in-house staff to automate them, which fits support triage/drafting; the signals are all absence-based site heuristics, so only a small positive adjustment is warranted.</div>
-    <div class="contact">From your list: team of 8</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 4 page(s) checked (about, contact, homepage, services) <span class="w">+12</span> <a href="https://jacobsinsurance.com">source</a></li><li><span class="src">site</span>no client login or self-serve portal found across 4 page(s) checked <span class="w">+12</span> <a href="https://jacobsinsurance.com">source</a></li><li><span class="src">site</span>contact page says &quot;we&#x27;ll get back to you&quot; <span class="w">+12</span> <a href="https://jacobsinsurance.com/contact/owosso">source</a></li><li><span class="src">site</span>contact page lists a fax number <span class="w">+12</span> <a href="https://jacobsinsurance.com/contact/owosso">source</a></li></ul>
-    <div class="opener"><span class="label">Draft opener (grounded in s2, s3, s4)</span>Your contact page still routes people to a form that promises you&#x27;ll get back to them, with a fax number listed alongside it, and I didn&#x27;t find a client login or self-serve portal on the pages I looked at. That setup suggests most policy questions and certificate requests land in someone&#x27;s inbox before anyone can act on them.</div>
+    <div class="math">score = 62 from rule weights +4 model adjustment (cap ±15)</div>
+    <div class="reason">All three signals show inbound quote and certificate requests arriving by phone/email with no self-serve form, and at 21 people there is no dedicated ops or dev owner, so manual inbound triage is a real and corroborated pain — though the signals are all from the same few site pages, so only a modest boost.</div>
+    <div class="contact">From your list: team of 21</div>
+    <ul class="evidence"><li><span class="src">site</span>contact page routes service requests to a person - &quot;...We’d love to learn how we can help you. Phone: (800) 737-3600 Email for Certificates For assistance with insurance certifica...&quot; <span class="w">+26</span> <a href="https://burkhartinsurance.com/contact-us">source</a></li><li><span class="src">site</span>site invites quotes but no online quote form or link was found on any of the 3 page(s) checked (about, contact, homepage) <span class="w">+24</span> <a href="https://burkhartinsurance.com">source</a></li><li><span class="src">site</span>contact page says &quot;Contact Burkhart Insurance for a Quote&quot; <span class="w">+12</span> <a href="https://burkhartinsurance.com/contact-us">source</a></li></ul>
+    <div class="opener"><span class="label">Draft opener (grounded in s1, s2, s3)</span>Your contact page asks people to reach out for a quote, but across your homepage, about, and contact pages I could not find an online quote form, so those requests seem to land with a person by phone or email. Certificate requests appear to route the same way.</div>
     <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: jacobsinsurance, jacobsinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: burkhartinsurance, burkhartinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
     <div class="rank">#2</div>
-    <div class="pct" style="color:#b45309">44%</div>
+    <div class="pct" style="color:#b45309">41%</div>
     <span class="band" style="color:#b45309;background:#fef3c7">MAYBE</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://beck-insurance.com">Beck Insurance Agency</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">beck-insurance.com</span></div>
+    <div class="name"><a href="https://simon-insurance.com">Simon Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">simon-insurance.com</span></div>
     <div class="offer">Fits: <b>general_automation</b> — workflow automation for repetitive manual back-office processes</div>
-    <div class="math">score = 48 from rule weights -4 model adjustment (cap ±15)</div>
-    <div class="reason">A 5-person independent insurance agency with only manual-intake markers (&quot;we will be in touch&quot;, a fax number) and two absence-of-feature gaps (no chat widget, no client portal) — the manual markers are credible at this headcount since nobody owns process improvement, but the capability gaps are generic website omissions rather than evidence of a measured volume pain, and nothing indicates ticket or data volume, so the fit is generic back-office workflow automation around quote/claim intake at a slightly discounted confidence.</div>
-    <div class="contact">From your list: team of 5</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 3 page(s) checked (about, contact, homepage) <span class="w">+12</span> <a href="https://beck-insurance.com">source</a></li><li><span class="src">site</span>no client login or self-serve portal found across 3 page(s) checked <span class="w">+12</span> <a href="https://beck-insurance.com">source</a></li><li><span class="src">site</span>homepage page says &quot;we will be in touch&quot; <span class="w">+12</span> <a href="https://beck-insurance.com">source</a></li><li><span class="src">site</span>about page lists a fax number <span class="w">+12</span> <a href="https://beck-insurance.com/about-us/">source</a></li></ul>
-    <div class="opener"><span class="label">Draft opener (grounded in s3, s2, s1)</span>Your homepage tells visitors &quot;we will be in touch,&quot; and across your homepage, about, and contact pages I could not find a client login or any chat option. So every quote request and policy question seems to land with someone on your team to answer by hand.</div>
+    <div class="math">score = 37 from rule weights +4 model adjustment (cap ±15)</div>
+    <div class="reason">The site funnels many recurring request types (certificates, auto ID cards, policy changes, policy reviews, claims) to a human at a 10-person agency that still lists a fax number, so repetitive back-office request handling is real and there is no internal team to automate it; the &quot;Join Our Team&quot; line is generic and carries no weight.</div>
+    <div class="contact">From your list: team of 10</div>
+    <ul class="evidence"><li><span class="src">site</span>homepage page routes service requests to a person - &quot;...o ID Card Request a Certificate Request Policy Change Policy Review Web Accessibility Contact Contact Us 100 E. Bridge Street Portland, MI 48875...&quot; <span class="w">+26</span> <a href="https://simon-insurance.com">source</a></li><li><span class="src">site</span>homepage page still lists a fax number <span class="w">+6</span> <a href="https://simon-insurance.com">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://simon-insurance.com">source</a></li></ul>
+    <div class="opener"><span class="label">Draft opener (grounded in s1, s2, s3)</span>Your site has ID card requests, certificate requests, policy changes and policy reviews all coming in to a person at the Bridge Street office, with a fax number still listed alongside them. That is a lot of small inbound asks landing on whoever is at the desk that day, and I noticed you also have a Join Our Team page up.</div>
     <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: beck-insurance, beckinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: simon-insurance, simoninsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
     <div class="rank">#3</div>
-    <div class="pct" style="color:#4b5563">34%</div>
+    <div class="pct" style="color:#4b5563">33%</div>
     <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://minorinsurance.com">Minor Insurance Agency</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">minorinsurance.com</span></div>
-    <div class="offer">Fits: <b>general_automation</b> — workflow automation for repetitive manual back-office processes</div>
-    <div class="math">score = 41 from rule weights -7 model adjustment (cap ±15)</div>
-    <div class="reason">The only evidence is absence of a chat widget and client portal plus a generic &quot;contact us for a free quote&quot; line and a &quot;Join Our Team&quot; recruiting link, which indicate manual inbound quote intake across seven offices but are website-feature absences rather than stated operational pain, and the 41-person agency shows no data, ticketing or reporting-specific signals, so the case is thin and I scored it down.</div>
-    <div class="contact">From your list: team of 41</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 3 page(s) checked (about, contact, homepage) <span class="w">+12</span> <a href="https://minorinsurance.com">source</a></li><li><span class="src">site</span>no client login or self-serve portal found across 3 page(s) checked <span class="w">+12</span> <a href="https://minorinsurance.com">source</a></li><li><span class="src">site</span>about page says &quot;Contact Minor Insurance for a free quote&quot; <span class="w">+12</span> <a href="https://minorinsurance.com/about/">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://minorinsurance.com">source</a></li></ul>
+    <div class="name"><a href="https://shineinsurance.com">Shine Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">shineinsurance.com</span></div>
+    <div class="offer">Fits: <b>triage_agent</b> — AI support triage agent (classifies, routes and drafts replies to support tickets)</div>
+    <div class="math">score = 31 from rule weights +2 model adjustment (cap ±15)</div>
+    <div class="reason">The site funnels multiple inbound service requests (auto ID cards, certificates, policy changes, billing) to a person with no automation layer, and at 11 staff there is no internal team to fix that, so a ticket classification/routing/drafting agent fits; the only other signal is a generic &quot;Join Our Team&quot; link that carries no weight.</div>
+    <div class="contact">From your list: team of 11</div>
+    <ul class="evidence"><li><span class="src">site</span>homepage page routes service requests to a person - &quot;...y a Bill Request Auto ID Card Request a Certificate Request Policy Change Web Accessibility Contact Us 1605 S Walnut Street Bloomington, IN 47...&quot; <span class="w">+26</span> <a href="https://shineinsurance.com">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://shineinsurance.com">source</a></li></ul>
     
     <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: minorinsurance, minorinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: shineinsurance, shineinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
     <div class="rank">#4</div>
-    <div class="pct" style="color:#4b5563">30%</div>
+    <div class="pct" style="color:#4b5563">21%</div>
     <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://westgateagency.com">Westgate Insurance Agency</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">westgateagency.com</span></div>
+    <div class="name"><a href="https://minorinsurance.com">Minor Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">minorinsurance.com</span></div>
     <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 36 from rule weights -6 model adjustment (cap ±15)</div>
-    <div class="reason">All three signals are thin absence-of-feature markers from a single scraped page whose content was mostly CSS junk, and the only manual-process cue (&quot;We will get back to you&quot;) is boilerplate contact-form text, so there is no evidence of a specific inbound volume or data pain to map to an offer despite the small team implying no in-house fixer.</div>
-    <div class="contact">From your list: team of 7</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 1 page(s) checked (homepage) <span class="w">+12</span> <a href="https://westgateagency.com">source</a></li><li><span class="src">site</span>no client login or self-serve portal found across 1 page(s) checked <span class="w">+12</span> <a href="https://westgateagency.com">source</a></li><li><span class="src">site</span>homepage page says &quot;We will get back to you&quot; <span class="w">+12</span> <a href="https://westgateagency.com">source</a></li></ul>
+    <div class="math">score = 29 from rule weights -8 model adjustment (cap ±15)</div>
+    <div class="reason">All three signals are generic website boilerplate — a &quot;free quote&quot; CTA, a &quot;Join Our Team&quot; link, and a missing-portal finding that the scraped nav itself contradicts (&quot;Companies and Bill Pay&quot;) — so there is no evidence of a specific manual workflow or data pain at this 41-person agency to map to an offer.</div>
+    <div class="contact">From your list: team of 41</div>
+    <ul class="evidence"><li><span class="src">site</span>no client login, portal or online bill-pay found across 3 page(s) checked <span class="w">+12</span> <a href="https://minorinsurance.com">source</a></li><li><span class="src">site</span>about page says &quot;Contact Minor Insurance for a free quote&quot; <span class="w">+12</span> <a href="https://minorinsurance.com/about/">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://minorinsurance.com">source</a></li></ul>
     
     <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: westgateagency, westgateinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: minorinsurance, minorinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
     <div class="rank">#5</div>
-    <div class="pct" style="color:#4b5563">24%</div>
+    <div class="pct" style="color:#4b5563">16%</div>
     <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://michigancommunity.com">Michigan Community Insurance Agency</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">michigancommunity.com</span></div>
+    <div class="name"><a href="https://agentschoice.com">Agents Choice Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">agentschoice.com</span></div>
     <div class="offer">Fits: <b>general_automation</b> — workflow automation for repetitive manual back-office processes</div>
-    <div class="math">score = 29 from rule weights -5 model adjustment (cap ±15)</div>
-    <div class="reason">The only real evidence is a fax number on the contact page and the absence of a chat widget, which is normal for a phone-first local insurance agency and not proof of a specific automation pain, so the paperwork-heavy quoting/policy work points loosely at general back-office automation but the signal set is too thin to support the base score.</div>
-    <div class="contact">From your list: team of 47</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 5 page(s) checked (about, careers, contact, homepage, services) <span class="w">+12</span> <a href="https://michigancommunity.com">source</a></li><li><span class="src">site</span>contact page lists a fax number <span class="w">+12</span> <a href="https://michigancommunity.com/other/contact_us.aspx">source</a></li><li><span class="src">site</span>careers page says &quot;join our team&quot; <span class="w">+5</span> <a href="https://michigancommunity.com/other/careers_with_michigan_community_insurance_agency.aspx">source</a></li></ul>
+    <div class="math">score = 18 from rule weights -2 model adjustment (cap ±15)</div>
+    <div class="reason">Only two thin signals exist: a missing client portal (a customer-facing gap, not evidence of an internal manual process) and a fax number on the about page, which together hint at a low-tech 19-person referral agency handling declines by hand but do not identify a specific automatable workflow, so the general_automation fit is weakly supported at best.</div>
+    <div class="contact">From your list: team of 19</div>
+    <ul class="evidence"><li><span class="src">site</span>no client login, portal or online bill-pay found across 2 page(s) checked <span class="w">+12</span> <a href="https://agentschoice.com">source</a></li><li><span class="src">site</span>about page still lists a fax number <span class="w">+6</span> <a href="https://agentschoice.com/about.html">source</a></li></ul>
     
     <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: agentschoice, agentschoiceinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
     <div class="rank">#6</div>
-    <div class="pct" style="color:#4b5563">23%</div>
+    <div class="pct" style="color:#4b5563">15%</div>
     <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://moonadrion.com">Moon and Adrion Insurance Agency</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">moonadrion.com</span></div>
-    <div class="offer">Fits: <b>general_automation</b> — workflow automation for repetitive manual back-office processes</div>
-    <div class="math">score = 29 from rule weights -6 model adjustment (cap ±15)</div>
-    <div class="reason">The only evidence is boilerplate website copy — an absent chat widget, a standard &quot;Contact us for a quote&quot; call to action, and a generic careers link — which is normal for any small independent insurance agency and gives no direct indication of ticket volume, spreadsheet work, or a specific manual bottleneck, so the manual inbound quote intake at this 17-person agency is at best a weak, unconfirmed hook for general workflow automation.</div>
-    <div class="contact">From your list: team of 17</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 4 page(s) checked (about, contact, homepage, services) <span class="w">+12</span> <a href="https://moonadrion.com">source</a></li><li><span class="src">site</span>homepage page says &quot;Contact us for a quote&quot; <span class="w">+12</span> <a href="https://moonadrion.com">source</a></li><li><span class="src">site</span>homepage page says &quot;join Our Team&quot; <span class="w">+5</span> <a href="https://moonadrion.com">source</a></li></ul>
+    <div class="name"><a href="https://nevermaninsurance.com">Neverman Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">nevermaninsurance.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 23 from rule weights -8 model adjustment (cap ±15)</div>
+    <div class="reason">The only signals are generic website boilerplate — a &quot;we&#x27;ll reach out&quot; quote-form line, a listed fax number, and a &quot;Join Our Team&quot; link — none of which describe an actual repeated internal process, so this 12-person independent agency shows no identifiable automation pain beyond ordinary small-agency web copy.</div>
+    <div class="contact">From your list: team of 12</div>
+    <ul class="evidence"><li><span class="src">site</span>homepage page says &quot;we&#x27;ll reach out&quot; <span class="w">+12</span> <a href="https://nevermaninsurance.com">source</a></li><li><span class="src">site</span>homepage page still lists a fax number <span class="w">+6</span> <a href="https://nevermaninsurance.com">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://nevermaninsurance.com">source</a></li></ul>
     
     <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: moonadrion, moonandadrioninsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
     <div class="rank">#7</div>
-    <div class="pct" style="color:#4b5563">19%</div>
+    <div class="pct" style="color:#4b5563">14%</div>
     <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://janusagents.com">Janus Insurance Agency</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">janusagents.com</span></div>
+    <div class="name"><a href="https://avanti-ins.com">Avanti Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">avanti-ins.com</span></div>
     <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 24 from rule weights -5 model adjustment (cap ±15)</div>
-    <div class="reason">The only two signals are generic web-form boilerplate — no chat widget and a &quot;we&#x27;ll get back to you&quot; contact page — which for a 12-person local agency that deliberately routes clients to phone and text is not evidence of a support or data pain, so no offer is identifiable from this evidence.</div>
-    <div class="contact">From your list: team of 12</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 3 page(s) checked (about, contact, homepage) <span class="w">+12</span> <a href="https://janusagents.com">source</a></li><li><span class="src">site</span>contact page says &quot;we&#x27;ll get back to you&quot; <span class="w">+12</span> <a href="https://janusagents.com/contact">source</a></li></ul>
+    <div class="math">score = 18 from rule weights -4 model adjustment (cap ±15)</div>
+    <div class="reason">The only evidence is a missing client portal and a fax number on the contact page — both weak, customer-facing tech-maturity markers common to small independent agencies rather than proof of a specific repetitive back-office workload, so no offer can be named from two thin signals.</div>
+    <div class="contact">From your list: team of 5</div>
+    <ul class="evidence"><li><span class="src">site</span>no client login, portal or online bill-pay found across 4 page(s) checked <span class="w">+12</span> <a href="https://avanti-ins.com">source</a></li><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://avanti-ins.com/contact-us/">source</a></li></ul>
     
     <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: janusagents, janusinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: avanti-ins, avantiinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
     <div class="rank">#8</div>
-    <div class="pct" style="color:#4b5563">16%</div>
+    <div class="pct" style="color:#4b5563">13%</div>
     <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://burkhartinsurance.com">Burkhart Insurance Agency</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">burkhartinsurance.com</span></div>
+    <div class="name"><a href="https://beck-insurance.com">Beck Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">beck-insurance.com</span></div>
     <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 24 from rule weights -8 model adjustment (cap ±15)</div>
-    <div class="reason">The only two signals are a missing chat widget and a generic &quot;contact us for a quote&quot; line on a 21-person local insurance agency&#x27;s site, which are boilerplate for small brokerages rather than evidence of a specific automation pain, so no offer is supported.</div>
-    <div class="contact">From your list: team of 21</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 3 page(s) checked (about, contact, homepage) <span class="w">+12</span> <a href="https://burkhartinsurance.com">source</a></li><li><span class="src">site</span>contact page says &quot;Contact Burkhart Insurance for a Quote&quot; <span class="w">+12</span> <a href="https://burkhartinsurance.com/contact-us">source</a></li></ul>
+    <div class="math">score = 18 from rule weights -5 model adjustment (cap ±15)</div>
+    <div class="reason">The only signals are boilerplate contact-form wording (&quot;we will be in touch&quot;) and a legacy fax number on an independent insurance agency&#x27;s brochure site, which indicate low digital maturity but name no specific workload — no ticket volume, data, or reporting pain — so no offer can be responsibly chosen from this two-signal set.</div>
+    <div class="contact">From your list: team of 5</div>
+    <ul class="evidence"><li><span class="src">site</span>homepage page says &quot;we will be in touch&quot; <span class="w">+12</span> <a href="https://beck-insurance.com">source</a></li><li><span class="src">site</span>about page still lists a fax number <span class="w">+6</span> <a href="https://beck-insurance.com/about-us/">source</a></li></ul>
     
     <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: burkhartinsurance, burkhartinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: beck-insurance, beckinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
     <div class="rank">#9</div>
-    <div class="pct" style="color:#4b5563">16%</div>
+    <div class="pct" style="color:#4b5563">13%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://insurewithbb.com">Brown and Brown Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">insurewithbb.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 18 from rule weights -5 model adjustment (cap ±15)</div>
+    <div class="reason">The only two signals are a boilerplate &quot;we will be in touch&quot; contact line and a fax number, which indicate a low-tech 20-person agency but name no specific process pain, so nothing here identifies a concrete automation target beyond the generic request forms on the site.</div>
+    <div class="contact">From your list: team of 20</div>
+    <ul class="evidence"><li><span class="src">site</span>contact page says &quot;we will be in touch&quot; <span class="w">+12</span> <a href="https://www.insurewithbb.com/contact/">source</a></li><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://www.insurewithbb.com/contact/">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: brownandbrowninsuranceagency, insurewithbb)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#10</div>
+    <div class="pct" style="color:#4b5563">12%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://jacobsinsurance.com">Jacobs Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">jacobsinsurance.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 18 from rule weights -6 model adjustment (cap ±15)</div>
+    <div class="reason">Only two weak site artifacts were found — a generic &quot;we&#x27;ll get back to you&quot; contact line and a listed fax number — neither of which identifies a specific repetitive process, so an 8-person local insurance agency here shows no concrete pain to map to an offer.</div>
+    <div class="contact">From your list: team of 8</div>
+    <ul class="evidence"><li><span class="src">site</span>contact page says &quot;we&#x27;ll get back to you&quot; <span class="w">+12</span> <a href="https://jacobsinsurance.com/contact/owosso">source</a></li><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://jacobsinsurance.com/contact/owosso">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: jacobsinsurance, jacobsinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#11</div>
+    <div class="pct" style="color:#4b5563">10%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://insurance-mitchell.com">Mitchell Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">insurance-mitchell.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 18 from rule weights -8 model adjustment (cap ±15)</div>
+    <div class="reason">The only signals are a generic &quot;contact us for a quote&quot; CTA and a fax number on an insurance agency site, neither of which evidences a specific manual back-office pain, and at 47 people there is no corroborating indication of an unaddressed process gap.</div>
+    <div class="contact">From your list: team of 47</div>
+    <ul class="evidence"><li><span class="src">site</span>contact page says &quot;Contact Mitchell Insurance Agency for a Quote&quot; <span class="w">+12</span> <a href="https://www.insurance-mitchell.com/locations/">source</a></li><li><span class="src">site</span>homepage page still lists a fax number <span class="w">+6</span> <a href="https://insurance-mitchell.com">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: insurance-mitchell, mitchellinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#12</div>
+    <div class="pct" style="color:#4b5563">10%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://pciaonline.com">PCIA (Professional Concepts Insurance Agency)</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">pciaonline.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 18 from rule weights -8 model adjustment (cap ±15)</div>
+    <div class="reason">The only signals are a generic careers-page phrase (&quot;we will be in touch&quot;) that says nothing about internal process pain and a legacy fax number, so there is no evidence pointing at any specific automation need at this 21-person insurance agency.</div>
+    <div class="contact">From your list: team of 21</div>
+    <ul class="evidence"><li><span class="src">site</span>careers page says &quot;we will be in touch&quot; <span class="w">+12</span> <a href="https://pciaonline.com/careers">source</a></li><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://pciaonline.com/contact">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#13</div>
+    <div class="pct" style="color:#4b5563">9%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://moonadrion.com">Moon and Adrion Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">moonadrion.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 17 from rule weights -8 model adjustment (cap ±15)</div>
+    <div class="reason">The only signals are a generic &quot;Contact us for a quote&quot; call-to-action and a &quot;Join Our Team&quot; link on a 17-person local insurance agency&#x27;s site — both are standard website boilerplate rather than evidence of a specific manual back-office bottleneck, so the manual-process flag is formally present but substantively empty and no offer can be named.</div>
+    <div class="contact">From your list: team of 17</div>
+    <ul class="evidence"><li><span class="src">site</span>homepage page says &quot;Contact us for a quote&quot; <span class="w">+12</span> <a href="https://moonadrion.com">source</a></li><li><span class="src">site</span>homepage page says &quot;join Our Team&quot; <span class="w">+5</span> <a href="https://moonadrion.com">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: moonadrion, moonandadrioninsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#14</div>
+    <div class="pct" style="color:#4b5563">7%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://fsahealth.org">FSA Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">fsahealth.org</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 12 from rule weights -5 model adjustment (cap ±15)</div>
+    <div class="reason">The only evidence is the absence of a client portal or online bill-pay (s1), a website capability gap that says nothing about internal manual workload, ticket volume, or data work, so no offer is supported and the lone weak signal overstates fit.</div>
+    <div class="contact">From your list: team of 14</div>
+    <ul class="evidence"><li><span class="src">site</span>no client login, portal or online bill-pay found across 5 page(s) checked <span class="w">+12</span> <a href="https://fsahealth.org">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#15</div>
+    <div class="pct" style="color:#4b5563">7%</div>
     <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
     <div class="name"><a href="https://trimbleins.com">Trimble Insurance Agency</a>
       <span style="color:#9ca3af;font-weight:400;font-size:12px">trimbleins.com</span></div>
     <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 24 from rule weights -8 model adjustment (cap ±15)</div>
-    <div class="reason">The only evidence is two absence-of-feature findings (no chat widget, no client portal) on a small family-owned insurance agency&#x27;s marketing site, which say nothing about internal manual workload and are normal for a 20-person agency, so no offer is actually supported.</div>
+    <div class="math">score = 12 from rule weights -5 model adjustment (cap ±15)</div>
+    <div class="reason">The only evidence is the absence of a client portal or online bill-pay on a two-page site scrape, which describes a customer-facing web gap rather than any documented internal manual process, ticket volume or data work, so no offer is supported and the lone signal is too thin and too tangential to our services to carry the base score.</div>
     <div class="contact">From your list: team of 20</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 2 page(s) checked (homepage, services) <span class="w">+12</span> <a href="https://trimbleins.com">source</a></li><li><span class="src">site</span>no client login or self-serve portal found across 2 page(s) checked <span class="w">+12</span> <a href="https://trimbleins.com">source</a></li></ul>
+    <ul class="evidence"><li><span class="src">site</span>no client login, portal or online bill-pay found across 2 page(s) checked <span class="w">+12</span> <a href="https://trimbleins.com">source</a></li></ul>
     
     <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: trimbleins, trimbleinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: trimbleins, trimbleinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
-    <div class="rank">#10</div>
-    <div class="pct" style="color:#4b5563">11%</div>
+    <div class="rank">#16</div>
+    <div class="pct" style="color:#4b5563">6%</div>
     <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://shineinsurance.com">Shine Insurance Agency</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">shineinsurance.com</span></div>
+    <div class="name"><a href="https://hamiltonins.net">Hamilton Insurance Group</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">hamiltonins.net</span></div>
     <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 17 from rule weights -6 model adjustment (cap ±15)</div>
-    <div class="reason">The only signals are a missing chat widget and a generic &quot;Join Our Team&quot; link on an 11-person local insurance agency&#x27;s site, neither of which evidences ticket volume, data work, or a repetitive back-office process, so no offer is supported and the formally-present capability gap is likely irrelevant.</div>
-    <div class="contact">From your list: team of 11</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 4 page(s) checked (about, contact, homepage, services) <span class="w">+12</span> <a href="https://shineinsurance.com">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://shineinsurance.com">source</a></li></ul>
+    <div class="math">score = 6 from rule weights +0 model adjustment (cap ±15)</div>
+    <div class="reason">The only evidence is a fax number on the homepage of a 27-person independent insurance agency, which hints at dated back-office habits but names no specific process, volume, or pain, so no offer can be responsibly selected.</div>
+    <div class="contact">From your list: team of 27</div>
+    <ul class="evidence"><li><span class="src">site</span>homepage page still lists a fax number <span class="w">+6</span> <a href="https://hamiltonins.net">source</a></li></ul>
     
     <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: shineinsurance, shineinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
-    <div class="rank">#11</div>
-    <div class="pct" style="color:#4b5563">9%</div>
+    <div class="rank">#17</div>
+    <div class="pct" style="color:#4b5563">5%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://fordinsurance.net">Ford Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">fordinsurance.net</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 11 from rule weights -6 model adjustment (cap ±15)</div>
+    <div class="reason">The only signals are a fax number and a generic &quot;open positions&quot; careers page, neither of which identifies a specific manual process or pain at this 49-person insurance agency, so no offer can be named and the thin, generic evidence warrants a downward nudge.</div>
+    <div class="contact">From your list: team of 49</div>
+    <ul class="evidence"><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://fordinsurance.net/contact-us">source</a></li><li><span class="src">site</span>careers page says &quot;open positions&quot; <span class="w">+5</span> <a href="https://fordinsurance.net/careers">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#18</div>
+    <div class="pct" style="color:#4b5563">5%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://michigancommunity.com">Michigan Community Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">michigancommunity.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 11 from rule weights -6 model adjustment (cap ±15)</div>
+    <div class="reason">The only signals are a fax number on the contact page and a generic &quot;join our team&quot; careers line, neither of which identifies an actual manual process or data pain, so there is no basis to name an offer for this 47-person insurance agency.</div>
+    <div class="contact">From your list: team of 47</div>
+    <ul class="evidence"><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://michigancommunity.com/other/contact_us.aspx">source</a></li><li><span class="src">site</span>careers page says &quot;join our team&quot; <span class="w">+5</span> <a href="https://michigancommunity.com/other/careers_with_michigan_community_insurance_agency.aspx">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#19</div>
+    <div class="pct" style="color:#4b5563">4%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://janusagents.com">Janus Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">janusagents.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 12 from rule weights -8 model adjustment (cap ±15)</div>
+    <div class="reason">The only signal is generic contact-page boilerplate (&quot;we&#x27;ll get back to you&quot;), which is not evidence of any specific manual workload, and nothing else in the evidence points to ticket volume, data work, or a repeatable back-office process, so the single weight-12 signal overstates the case.</div>
+    <div class="contact">From your list: team of 12</div>
+    <ul class="evidence"><li><span class="src">site</span>contact page says &quot;we&#x27;ll get back to you&quot; <span class="w">+12</span> <a href="https://janusagents.com/contact">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: janusagents, janusinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#20</div>
+    <div class="pct" style="color:#4b5563">3%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://goodmanvenegas.com">Goodman Venegas Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">goodmanvenegas.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 6 from rule weights -3 model adjustment (cap ±15)</div>
+    <div class="reason">The only signal is a fax number on the contact page, which is a weak legacy marker common to insurance agencies and names no specific manual process, so the evidence is too thin to map to an offer.</div>
+    <div class="contact">From your list: team of 19</div>
+    <ul class="evidence"><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://www.goodmanvenegas.com/contact-us/">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#21</div>
+    <div class="pct" style="color:#4b5563">3%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://phelanins.com">Phelan Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">phelanins.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 11 from rule weights -8 model adjustment (cap ±15)</div>
+    <div class="reason">The only two signals are a fax number on the contact page and a generic &quot;Join Our Team&quot; careers line, neither of which indicates any specific manual process or data pain, so there is no evidence base for naming an offer at this 46-person agency.</div>
+    <div class="contact">From your list: team of 46</div>
+    <ul class="evidence"><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://phelanins.com/contact/">source</a></li><li><span class="src">site</span>careers page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://phelanins.com/careers/">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>ok</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#22</div>
+    <div class="pct" style="color:#4b5563">0%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://iangrahamagency.com">Ian Graham Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">iangrahamagency.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 0 from rule weights +0 model adjustment (cap ±15)</div>
+    <div class="reason">No concrete signal found, and coverage was partial (reviews robots-disallowed, site unreachable).</div>
+    <div class="contact">From your list: team of 8</div>
+    <ul class="evidence"><li>No signals gathered.</li></ul>
+    
+    <div class="meta">Coverage: site <span class="bad">unreachable</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">site: homepage could not be fetched (no signal, not scored)<br>entity: site unreadable, entity type not assessed<br>hiring: no public Greenhouse/Lever board found (tokens tried: iangrahamagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#23</div>
+    <div class="pct" style="color:#4b5563">0%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://lloydottoagencies.com">Lloyd Otto Agencies</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">lloydottoagencies.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 0 from rule weights +0 model adjustment (cap ±15)</div>
+    <div class="reason">No concrete signal found, and coverage was partial (reviews robots-disallowed, site unreachable).</div>
+    <div class="contact">From your list: team of 15</div>
+    <ul class="evidence"><li>No signals gathered.</li></ul>
+    
+    <div class="meta">Coverage: site <span class="bad">unreachable</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">site: homepage could not be fetched (no signal, not scored)<br>entity: site unreadable, entity type not assessed<br>hiring: no public Greenhouse/Lever board found (tokens tried: lloydottoagencies)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#24</div>
+    <div class="pct" style="color:#4b5563">0%</div>
     <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
     <div class="name"><a href="https://mmains.net">MMA Insurance Agency</a>
       <span style="color:#9ca3af;font-weight:400;font-size:12px">mmains.net</span></div>
     <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 17 from rule weights -8 model adjustment (cap ±15)</div>
-    <div class="reason">The only signals are the absence of a chat widget and a generic &quot;Join Our Team&quot; link on the site of a 13-person Ohio insurance agency — neither indicates any specific manual-process, data or ticket-volume pain, so there is no basis for naming an offer.</div>
+    <div class="math">score = 5 from rule weights -5 model adjustment (cap ±15)</div>
+    <div class="reason">The only signal is a generic &quot;Join Our Team&quot; link on a small Ohio insurance agency&#x27;s site, which says nothing about manual process pain or any specific automation need, so the evidence is too thin to name an offer.</div>
     <div class="contact">From your list: team of 13</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 4 page(s) checked (about, contact, homepage, services) <span class="w">+12</span> <a href="https://mmains.net">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://mmains.net">source</a></li></ul>
+    <ul class="evidence"><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://mmains.net">source</a></li></ul>
     
     <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: mmains, mmainsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: mmains, mmainsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
-    <div class="rank">#12</div>
-    <div class="pct" style="color:#4b5563">2%</div>
-    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+    <div class="rank">#25</div>
+    <div class="pct" style="color:#6d28d9;font-size:15px">not scored</div>
+    <span class="band" style="color:#6d28d9;background:#ede9fe">REVIEW</span>
   </div>
   <div class="body">
     <div class="name"><a href="https://allenharmon.com">Allen-Harmon-Mason-Selinger Insurance Agency</a>
       <span style="color:#9ca3af;font-weight:400;font-size:12px">allenharmon.com</span></div>
-    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 12 from rule weights -10 model adjustment (cap ±15)</div>
-    <div class="reason">The only evidence is scraped CSS boilerplate and a single absence-of-chat-widget signal on a small 14-person insurance agency site, which says nothing about any actual manual process or data pain, so no offer can be named.</div>
-    <div class="contact">From your list: team of 14</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 1 page(s) checked (homepage) <span class="w">+12</span> <a href="https://allenharmon.com">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: allenharmon, allenharmonmasonselingerinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    
+    <div class="reason">Entity type could not be determined from the homepage; review what this company is before contacting it.</div>
+    <div class="contact">From your list: team of 14</div>
+    
+    
+    <div class="meta">Coverage: site <span>ok</span></div>
+    <div class="notes">entity: type unclear from the homepage; review before contacting</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#26</div>
+    <div class="pct" style="color:#9f1239;font-size:15px">not scored</div>
+    <span class="band" style="color:#9f1239;background:#ffe4e6">DISQUALIFIED</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://michagent.org">Big I Michigan</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">michagent.org</span></div>
+    
+    
+    <div class="reason">Not a prospect: this is a association, not an operating business of the target type. Evidence from its own homepage: &quot;Sign in Skip auxiliary navigation (Press Enter). Contact Us Code of Conduct Skip main navigation (Press Enter). Toggle navigation About&quot;</div>
+    <div class="contact">From your list: team of 19</div>
+    
+    
+    <div class="meta">Coverage: site <span>ok</span></div>
+    <div class="notes">site: live chat/support widget present (Zendesk widget)</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#27</div>
+    <div class="pct" style="color:#9f1239;font-size:15px">not scored</div>
+    <span class="band" style="color:#9f1239;background:#ffe4e6">DISQUALIFIED</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://roughnotes.com">The Rough Notes Company</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">roughnotes.com</span></div>
+    
+    
+    <div class="reason">Not a prospect: this is a publisher, not an operating business of the target type. Evidence from its own homepage: &quot;Home About Publications RN Newsletter Products &amp; Solutions Media Kits Contact Us Shop Catalog Enter Promo Code Pay Your Existing&quot;</div>
+    <div class="contact">From your list: team of 28</div>
+    
+    
+    <div class="meta">Coverage: site <span>ok</span></div>
+    
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#28</div>
+    <div class="pct" style="color:#9f1239;font-size:15px">not scored</div>
+    <span class="band" style="color:#9f1239;background:#ffe4e6">DISQUALIFIED</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://uaii.net">Underwriters Alliance of Indiana</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">uaii.net</span></div>
+    
+    
+    <div class="reason">Not a prospect: this is a network, not an operating business of the target type. Evidence from its own homepage: &quot;oggle Menu Our Team Local / Regional / National FAQs Events The SIAA Difference Our Business Toggle Menu Market Access – Our Partners Benef&quot;</div>
+    <div class="contact">From your list: team of 5</div>
+    
+    
+    <div class="meta">Coverage: site <span>ok</span></div>
+    
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#29</div>
+    <div class="pct" style="color:#6d28d9;font-size:15px">not scored</div>
+    <span class="band" style="color:#6d28d9;background:#ede9fe">REVIEW</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://westgateagency.com">Westgate Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">westgateagency.com</span></div>
+    
+    
+    <div class="reason">Entity type could not be determined from the homepage; review what this company is before contacting it.</div>
+    <div class="contact">From your list: team of 7</div>
+    
+    
+    <div class="meta">Coverage: site <span>ok</span></div>
+    <div class="notes">entity: type unclear from the homepage; review before contacting</div>
   </div>
 </div>
 </div></body></html>

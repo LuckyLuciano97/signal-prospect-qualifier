@@ -1,5 +1,5 @@
 Signal validation report
-input records: 12 (results.jsonl, written by run.py)
+input records: 29 (results.jsonl, written by run.py)
 
 [1] no personal data in the signal/evidence layer: PASS
     emails, phone patterns, and the user-supplied contact scanned for across every signal detail, reasoning line, opener, and description
@@ -10,9 +10,15 @@ input records: 12 (results.jsonl, written by run.py)
     2 opener(s) checked
 
 [4] unreachable/blocked companies are scored 0 with no fabricated reason: PASS
-    0 compan(ies) had an unreadable site and no other signals
+    2 compan(ies) had an unreadable site and no other signals
 
 [5] score distribution is sane and tracks evidence: PASS
-    bands populated: ['FAIL', 'MAYBE']
+    bands populated: ['FAIL', 'MAYBE']; mean score with >=2 signals: 18 (16 companies), with zero signals: 0 (2 companies)
+
+[6] entity gate: non-prospects are disqualified, unscored and quoted: PASS
+    3 compan(ies) disqualified: Big I Michigan (association), The Rough Notes Company (publisher), Underwriters Alliance of Indiana (network)
+
+[7] signal diversity: no single signal dominates the evidence: PASS
+    48 evidence line(s) across 6 signal type(s); most common 'fax_number' at 31% (limit 40%)
 
 result: ALL CHECKS PASSED

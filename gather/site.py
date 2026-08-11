@@ -4,18 +4,30 @@ Reads the homepage and, when they exist, the about / services / careers /
 contact pages, and extracts three kinds of things:
 
 * **Context** — what the company does, for the qualifier and the opener.
-  Title, meta description and the opening of the about page; never a guess.
-* **Capability gaps** — things visibly absent from their own pages: no live
-  chat or support widget in the HTML of any page checked, a contact page
-  that offers only a form or an email address. Each claim states exactly
-  what was checked, because "not detected in N pages" is an observation and
-  "they have no chat" would be an inference.
-* **Growth signals** — hiring and expansion language in the visible text,
-  quoted.
+* **Manual-process evidence** — the company's own copy describing work a
+  person does by hand: documents returned by email or fax, printable intake
+  forms, service requests (certificates, ID cards, policy changes) routed to
+  a human, quotes with no online path. These are the signals that actually
+  discriminate between one small agency and the next.
+* **Capability gaps** — a self-serve thing visibly absent: no client portal,
+  or a contact page that genuinely offers no way to reach a person.
 
-It also collects two things for the other modules: the careers page URL and
-any Greenhouse/Lever board links found in the markup (a link the company
-itself published beats guessing board tokens from the domain).
+Two hard-won rules live in this file:
+
+1. **Detect on visible text, not markup.** An early version matched the
+   ``&quot;`` HTML entity as the word "quote".
+2. **Absence claims must survive the way small sites are actually built.**
+   The contact-channel check used to look only for ``tel:`` links and so
+   announced "no phone number found" about a page that displayed
+   ``260-925-4766`` next to the words "call, email or stop by". That false
+   line reached a draft opener. Absence is now only claimed when the phone
+   pattern is missing from the rendered text as well.
+
+A note on what is *not* here: "no live chat widget" was deleted. It fired on
+15 of 17 companies in the batch-2 corpus and made up 29% of all evidence.
+Widget presence is still detected, because it usefully *suppresses* the
+contact-channel gap and feeds the competitive module, but it is no longer a
+signal of its own.
 """
 
 from __future__ import annotations
@@ -26,15 +38,14 @@ from urllib.parse import urljoin, urlsplit
 
 from bs4 import BeautifulSoup
 
-from gather import add_signal, visible_text
+from gather import add_signal, excerpt, visible_text
 from model import CompanyResult
 from net import HostBlocked, PoliteClient
 
 log = logging.getLogger("signal.site")
 
-# Substrings in raw HTML that identify a live chat / support widget. Used to
-# *suppress* the capability-gap claim, so a false positive here errs safe:
-# we fail to claim a gap rather than claim one that is not there.
+# Substrings in raw HTML that identify a live chat / support widget. A false
+# positive here errs safe: it suppresses a gap claim rather than inventing one.
 CHAT_WIDGETS = {
     "Intercom": ("intercom.io", "intercomcdn", "window.Intercom"),
     "Drift": ("driftt.com", "drift.com/embed"),
@@ -55,6 +66,8 @@ CHAT_WIDGETS = {
     "Front chat": ("chat.frontapp.com",),
     "Salesforce chat": ("embeddedservice", "salesforceliveagent"),
     "Ada": ("ada.support",),
+    "Podium": ("podium.com", "podium.js"),
+    "Birdeye": ("birdeye.com",),
 }
 
 GROWTH_RE = re.compile(
@@ -63,12 +76,39 @@ GROWTH_RE = re.compile(
     re.IGNORECASE,
 )
 
-# Manual-process markers: the company's own visible copy describing a
-# process a person performs by hand. Each marker found becomes one signal
-# quoting the phrase (never numbers — a fax signal says "lists a fax
-# number", it does not store the number). Added after the first SMB run:
-# tiny service businesses have no job boards and no review pages, so the
-# way they describe their own workflow is the strongest public signal left.
+# A phone number as a person reads it. Used only to *withhold* the
+# "no way to reach anyone" claim, so a loose pattern is the safe direction.
+PHONE_TEXT_RE = re.compile(
+    r"(?:\+\d{1,2}[\s.-]?)?\(?\b\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b")
+
+# -- heavyweight: documents and forms that move by hand ---------------------
+MANUAL_INTAKE_RE = {
+    "documents returned by email or fax": re.compile(
+        r"(?:e-?mail|fax|mail)\s+(?:it|them|us|back|your|the|completed)[^.!?]{0,60}?"
+        r"\b(form|application|document|paperwork|declaration|dec page|policy)\b",
+        re.IGNORECASE),
+    "printable form to complete and return": re.compile(
+        r"\b(print|download|complete|fill out)\b[^.!?]{0,60}?\b(form|application)\b"
+        r"[^.!?]{0,60}?\b(return|mail|fax|e-?mail|bring|drop off|sign)\b",
+        re.IGNORECASE),
+    "ACORD paper form referenced": re.compile(r"\bacord\b[^.!?]{0,40}\b(form|application|25|125)\b",
+                                              re.IGNORECASE),
+}
+
+# -- heavyweight: routine service work routed to a person -------------------
+# Requires BOTH a service-request noun and a human channel in the same breath.
+# "Request Certificate" as a portal link must NOT fire; "call us for a
+# certificate" must.
+SERVICE_NOUNS = (r"certificates? of insurance|certificates?|\bcoi\b|auto id card|id cards?"
+                 r"|policy change|add (?:a )?(?:driver|vehicle)|proof of insurance"
+                 r"|declaration page|dec page")
+HUMAN_CHANNEL = r"call|phone|e-?mail|fax|stop by|come in|in person|contact (?:us|our office)"
+SERVICE_REQUEST_MANUAL_RE = re.compile(
+    rf"(?:(?:{HUMAN_CHANNEL})[^.!?]{{0,60}}?(?:{SERVICE_NOUNS})"
+    rf"|(?:{SERVICE_NOUNS})[^.!?]{{0,60}}?(?:{HUMAN_CHANNEL}))",
+    re.IGNORECASE)
+
+# -- medium: generic manual-process phrasing --------------------------------
 MANUAL_MARKERS = {
     "call-for-quote": re.compile(
         r"(?:call|contact|phone)(?: us)?[^.!?]{0,40}?for (?:a |your |free |an )*quot(?:e|ation)s?\b",
@@ -76,17 +116,19 @@ MANUAL_MARKERS = {
     "we-will-get-back": re.compile(
         r"(?:we[’']ll|we will) (?:get back to you|be in touch|reach out|contact you)",
         re.IGNORECASE),
-    "fax": re.compile(r"\bfax\b", re.IGNORECASE),
 }
 
-# Any of these in visible text or an href means the company offers some
-# self-serve login; its absence across every page checked is a capability
-# gap. Matching is deliberately broad because it errs toward *suppressing*
-# the gap claim, never toward inventing one.
+FAX_RE = re.compile(r"\bfax\b", re.IGNORECASE)
+
+# Quote language, and the things that mean an online quote path exists.
+QUOTE_MENTION_RE = re.compile(r"\bquot(?:e|es|ation)\b", re.IGNORECASE)
+QUOTE_PATH_RE = re.compile(r"quote|rate-?quote|get-?a-?quote|apply|application", re.IGNORECASE)
+
 PORTAL_RE = re.compile(
     r"\b(?:log ?in|sign ?in|portal|my account|client (?:center|login|area)"
-    r"|policyholder)\b", re.IGNORECASE)
-PORTAL_HREF_RE = re.compile(r"login|signin|sign-in|portal|account", re.IGNORECASE)
+    r"|policyholder|pay (?:my |your )?bill(?: online)?)\b", re.IGNORECASE)
+PORTAL_HREF_RE = re.compile(r"login|signin|sign-in|portal|account|payment|paybill",
+                            re.IGNORECASE)
 
 BOARD_LINK_RE = re.compile(
     r"(?:job-boards|boards)\.(?:eu\.)?greenhouse\.io/(?:embed/job_board\?for=)?([A-Za-z0-9._-]+)"
@@ -94,9 +136,6 @@ BOARD_LINK_RE = re.compile(
     re.IGNORECASE,
 )
 
-# href / anchor-text patterns for the standard subpages, tried in order; the
-# literal conventional paths are probed as a fallback when no link matches,
-# and a 404 on a guessed path is quietly accepted.
 PAGE_PATTERNS = {
     "about": (re.compile(r"about|company|who[-_ ]we[-_ ]are", re.I), ("/about", "/about-us")),
     "services": (re.compile(r"services|products|solutions|platform|features|what[-_ ]we[-_ ]do", re.I),
@@ -138,8 +177,6 @@ def _find_subpage_urls(base_url: str, soup: BeautifulSoup) -> dict[str, str]:
             if category in found:
                 continue
             if pattern.search(urlsplit(absolute).path) or pattern.search(text):
-                # careers pages legitimately live off-site (jobs.lever.co);
-                # everything else must stay on the company's own host.
                 if host == base_host or category == "careers":
                     found[category] = absolute
     return found
@@ -173,10 +210,24 @@ def _describe(soup: BeautifulSoup, homepage_text: str, about_text: str) -> str:
     return " | ".join(seen)[:1200]
 
 
+def _has_online_quote(pages: dict[str, str], page_urls: dict[str, str]) -> bool:
+    """Does any fetched page link to, or host, an online quote path?"""
+    for url in page_urls.values():
+        if QUOTE_PATH_RE.search(urlsplit(url).path):
+            return True
+    for html in pages.values():
+        soup = BeautifulSoup(html, "html.parser")
+        for anchor in soup.find_all("a", href=True):
+            if QUOTE_PATH_RE.search(anchor["href"]) or \
+                    QUOTE_PATH_RE.search(anchor.get_text(" ", strip=True)):
+                return True
+    return False
+
+
 def gather(client: PoliteClient, result: CompanyResult) -> dict:
     """Read the site; return facts the other modules build on."""
     facts: dict = {"careers_url": None, "board_hints": [], "chat_widget": None,
-                   "pages_checked": []}
+                   "pages_checked": [], "homepage_text": ""}
 
     homepage = None
     candidates = [f"https://{result.domain}"]
@@ -218,7 +269,6 @@ def gather(client: PoliteClient, result: CompanyResult) -> dict:
     facts["pages_checked"] = list(page_urls.values())
     facts["careers_url"] = page_urls.get("careers")
 
-    # Board links anywhere in the fetched markup are the strongest token hint.
     for html in pages.values():
         for match in BOARD_LINK_RE.finditer(html):
             gh_token, lever_token = match.group(1), match.group(2)
@@ -229,67 +279,92 @@ def gather(client: PoliteClient, result: CompanyResult) -> dict:
     texts = {name: visible_text(html) for name, html in pages.items()}
     result.description = _describe(soup, texts["homepage"], texts.get("about", ""))
     result.coverage["site"] = "ok"
+    facts["homepage_text"] = texts["homepage"]
 
-    # -- capability gap: no chat/support widget anywhere we looked ---------
     widget = _detect_widget(pages)
     facts["chat_widget"] = widget
     if widget:
         result.notes.append(f"site: live chat/support widget present ({widget})")
-    else:
-        add_signal(
-            result, "capability_gap", "site", homepage.url,
-            f"no live chat or support widget detected in the HTML of "
-            f"{len(pages)} page(s) checked ({', '.join(sorted(pages))})",
-        )
 
-    # -- capability gap: contact page is a dead drop -----------------------
-    contact_html = pages.get("contact")
-    if contact_html:
-        has_form = "<form" in contact_html.lower()
-        has_mailto = "mailto:" in contact_html.lower()
-        has_phone = "tel:" in contact_html.lower()
-        if (has_form or has_mailto) and not has_phone and not widget:
-            channel = "a contact form" if has_form else "an email address"
-            add_signal(
-                result, "capability_gap", "site", page_urls["contact"],
-                f"contact page offers only {channel}; no phone number or live "
-                f"channel found on it",
-            )
+    # -- heavyweight: documents and forms moving by hand -------------------
+    for label, pattern in MANUAL_INTAKE_RE.items():
+        hit = None
+        for name, text in texts.items():
+            match = pattern.search(text)
+            if match:
+                hit = (name, match)
+                break
+        if hit:
+            name, match = hit
+            add_signal(result, "manual_intake", "site", page_urls[name],
+                       f'{name} page: {label} - "{excerpt(texts[name], match, radius=40)}"')
+            break
 
-    # -- capability gap: no self-serve login/portal anywhere ---------------
+    # -- heavyweight: routine service requests routed to a person ----------
+    for name, text in texts.items():
+        match = SERVICE_REQUEST_MANUAL_RE.search(text)
+        if match:
+            add_signal(result, "service_request_manual", "site", page_urls[name],
+                       f'{name} page routes service requests to a person - '
+                       f'"{excerpt(text, match, radius=40)}"')
+            break
+
+    # -- heavyweight: quotes invited with no online path -------------------
+    all_text = " ".join(texts.values())
+    if QUOTE_MENTION_RE.search(all_text) and not _has_online_quote(pages, page_urls):
+        add_signal(result, "quote_phone_only", "site", homepage.url,
+                   f"site invites quotes but no online quote form or link was found "
+                   f"on any of the {len(pages)} page(s) checked "
+                   f"({', '.join(sorted(pages))})")
+
+    # -- medium: no self-serve client portal -------------------------------
     has_portal = any(PORTAL_RE.search(text) for text in texts.values()) or \
         any(PORTAL_HREF_RE.search(a.get("href", ""))
             for html_body in pages.values()
             for a in BeautifulSoup(html_body, "html.parser").find_all("a", href=True))
     if not has_portal:
-        add_signal(
-            result, "capability_gap", "site", homepage.url,
-            f"no client login or self-serve portal found across "
-            f"{len(pages)} page(s) checked",
-        )
+        add_signal(result, "capability_gap", "site", homepage.url,
+                   f"no client login, portal or online bill-pay found across "
+                   f"{len(pages)} page(s) checked")
 
-    # -- manual-process language -------------------------------------------
+    # -- medium: contact page with genuinely no human channel --------------
+    # Absence is claimed only when the phone pattern is missing from the
+    # rendered text too, not merely from the markup.
+    contact_html = pages.get("contact")
+    if contact_html:
+        contact_text = texts["contact"]
+        has_form = "<form" in contact_html.lower()
+        has_mailto = "mailto:" in contact_html.lower()
+        has_phone = ("tel:" in contact_html.lower()
+                     or bool(PHONE_TEXT_RE.search(contact_text)))
+        if (has_form or has_mailto) and not has_phone and not widget:
+            channel = "a contact form" if has_form else "an email address"
+            add_signal(result, "capability_gap", "site", page_urls["contact"],
+                       f"contact page offers only {channel}; no phone number appears "
+                       f"in its text and no live channel was found on it")
+
+    # -- medium: generic manual phrasing -----------------------------------
     for marker, pattern in MANUAL_MARKERS.items():
         for name, text in texts.items():
             match = pattern.search(text)
-            if not match:
-                continue
-            if marker == "fax":
-                detail = f"{name} page lists a fax number"
-            else:
-                detail = f'{name} page says "{match.group(0)}"'
-            add_signal(result, "manual_process_language", "site",
-                       page_urls[name], detail)
+            if match:
+                add_signal(result, "manual_process_language", "site",
+                           page_urls[name], f'{name} page says "{match.group(0)}"')
+                break
+
+    # -- weak: fax, its own low-weight type --------------------------------
+    for name, text in texts.items():
+        if FAX_RE.search(text):
+            add_signal(result, "fax_number", "site", page_urls[name],
+                       f"{name} page still lists a fax number")
             break
 
-    # -- growth language ---------------------------------------------------
+    # -- weak: growth language ---------------------------------------------
     for name, text in texts.items():
         match = GROWTH_RE.search(text)
         if match:
-            add_signal(
-                result, "growth_language", "site", page_urls[name],
-                f'{name} page says "{match.group(0)}"',
-            )
+            add_signal(result, "growth_language", "site", page_urls[name],
+                       f'{name} page says "{match.group(0)}"')
             break
 
     return facts

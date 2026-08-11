@@ -102,6 +102,17 @@ def _weigh(result: CompanyResult) -> int:
     return min(base, config.BASE_SCORE_CAP)
 
 
+def weigh_only(result: CompanyResult) -> int:
+    """Fill signal weights and base_score without scoring or calling a model.
+
+    Used for companies the entity gate removed: the observations they produced
+    are real and stay in the record, so their arithmetic has to reconcile even
+    though no score is ever derived from it.
+    """
+    result.base_score = _weigh(result)
+    return result.base_score
+
+
 def _coverage_sentence(result: CompanyResult) -> str:
     failed = {m: s for m, s in result.coverage.items()
               if s in ("blocked", "unreachable", "robots-disallowed")}

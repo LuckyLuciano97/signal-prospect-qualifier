@@ -14,6 +14,31 @@ and every threshold live in `config.py`, so pointing it at a different
 service business is a config edit, not a rewrite — the underlying product is
 "find and qualify your ideal customers by their real buying signals."
 
+## Two gates before anything is scored
+
+**Is this even a prospect?** (`gather/entity.py`) A trade association, a trade
+publisher and an agency network all describe manual-looking workflows on
+their websites, and an earlier version of this tool happily ranked all three
+as leads — one at rank 4, with a drafted opener. The entity gate reads the
+homepage and removes anything that is not an operating business of the target
+type, with a verbatim quote from the page as its evidence. Disqualified
+companies get no score and no model call.
+
+It never disqualifies on a name. The list that prompted this gate flagged
+"Brown and Brown" as a national brokerage to filter out; the company in the
+run was a 20-person independent agency in Auburn, Indiana that happens to
+share the name, and it was the best-evidenced prospect in the batch. Scale is
+judged on what a site says about its own footprint. `tests/test_entity_gate.py`
+runs the four real cases, including that control, and must stay green.
+
+**Is this signal actually a signal?** (`audit.py`) A detector that fires on
+nearly every company is a property of the corpus, not of the company: it
+inflates every score by the same amount and crowds out the lines that
+differ. Run `python audit.py` after any run to see per-signal fire rates;
+`validate.py` check 7 fails a run where one signal exceeds 40% of the
+evidence. This is how the "no live chat widget" check was caught and deleted
+after firing on 15 of 17 companies and making up 29% of all evidence.
+
 ## The one rule everything else follows
 
 **No evidence, no score.** Every point of every score traces to a specific
@@ -35,6 +60,7 @@ holds for the committed run (check 2: zero evidence-free scores).
 * **`results.csv`** — the same data flat, for sorting and outreach tracking.
 * **`summary.json`** — run statistics: bands, request counts, token counts.
 * **`results.jsonl`** — the full structured record `validate.py` audits.
+* **`audit_report.txt`** — per-signal fire rates for the committed run.
 
 ## Scoring: PASS / MAYBE / FAIL, plus a percentage
 
@@ -49,10 +75,16 @@ reasoning, and may adjust the base by at most ±15 points, citing the signal
 ids its adjustment rests on. A positive adjustment citing nothing is zeroed.
 
 * **PASS (70–100%)** — a clear, specific, evidenced pain. Worth reaching out.
-* **MAYBE (40–69%)** — a real but softer signal. Worth a look; the pass line
-  is deliberately generous, because burying a borderline prospect helps
-  nobody. MAYBEs get draft openers too.
+* **MAYBE (40–69%)** — a real but softer signal. Worth a look. MAYBEs get
+  draft openers too.
 * **FAIL (0–39%)** — nothing concrete found, or not a fit. No opener drafted.
+* **DISQUALIFIED / REVIEW** — set by the entity gate before scoring, and
+  shown without a percentage because they were never scored.
+
+The MAYBE line was briefly lowered to 30 and then put back. At 30 the tool
+surfaced 53% of a run, which makes it a sorter rather than a qualifier, and
+lowering it overrode the model's correct "this evidence is thin" judgement
+instead of acting on it. The fix for thin evidence is better detection.
 
 Thresholds, weights, the adjustment cap, and which bands get openers are all
 in `config.py`.
@@ -122,6 +154,8 @@ python run.py                 # the committed example list
 python run.py --input your_apollo_export.csv
 python run.py --no-llm        # rule-based scores only, no key needed
 python validate.py            # audit the run's promises; exits non-zero on failure
+python audit.py               # per-signal fire rates; run before changing a weight
+python tests/test_entity_gate.py   # entity-gate regression, no key needed
 ```
 
 Input CSV needs `company` and `domain` columns; `industry`, `team_size`,
@@ -132,11 +166,26 @@ by the same signal). Common Apollo header spellings are recognised.
 
 ## Numbers from the committed run
 
-The committed `report.html` / `results.csv` come from a real run on
-2026-08-06 over the 12 companies in `input_example.csv`: small US insurance
-agencies, 5 to 47 people — the segment a small automation studio actually
-sells to. Small prospects have no job boards and no review pages, so the
-run leans on what their own sites show:
+The committed `report.html` / `results.csv` come from a run on 2026-08-11
+over the 29 companies in `input_example.csv`: small US insurance agencies,
+5 to 49 people — the segment a small automation studio actually sells to.
+
+* **29 companies: 0 PASS, 2 MAYBE, 22 FAIL, 3 disqualified, 2 to review.**
+  48 evidence lines across 6 signal types, no type above 31%.
+* Top of the list: **Burkhart Insurance Agency at 66%** — service requests
+  routed to a person, quote language with no online quote path anywhere on
+  the site, and a "call for a quote" line, each quoted with its page.
+* **Two MAYBEs out of 24 scored is the honest read of this corpus.** These
+  sites mostly show fax numbers and "Join Our Team", which are weak signals
+  and are now weighted like it. The way to get more real prospects out of
+  this segment is a live review source (see below), not a lower threshold.
+* The entity gate removed a trade association, a trade publisher and an
+  agency network — all three of which the previous version had scored as
+  prospects, one at rank 4 with a drafted opener.
+
+An earlier run of the same list is what produced most of the above: it is
+kept in the history because every fix here was paid for by a specific defect
+that reached the output.
 
 * **12 companies, 32 signals gathered, 0 PASS / 2 MAYBE / 10 FAIL**,
   scores spread 2%–50%, openers drafted for both MAYBEs. 14 model calls
@@ -162,13 +211,46 @@ run leans on what their own sites show:
   fax numbers) and missing client portals, each quoted verbatim from the
   company's own pages. That failed validation run is the system working.
 
-Two build-time defects the checks caught, left here as evidence they work:
-an enterprise test run scored Elastic 57% on a "support cluster" that
-title-matching had built out of an FP&A manager and a revenue-ops role
-(the qualifier's own reasoning flagged it; a finance-title guard now
-excludes such roles), and a first draft of the manual-process detectors
-matched the `&quot;` HTML entity as the word "quote" — which is why every
-detector now runs on extracted visible text, never raw markup.
+### Defects the checks caught, kept as evidence they work
+
+* **A false claim reached a draft opener.** The contact-channel detector
+  looked only for `tel:` links, so it announced "no phone number or live
+  channel" about a page that displayed `260-925-4766` beside the words
+  "call, email or stop by". Absence is now only claimed when the phone
+  pattern is missing from the rendered text too. This is the failure mode
+  the whole tool exists to prevent, and it got out.
+* **A constant masquerading as a signal.** "No live chat widget" fired on 15
+  of 17 companies and made up 29% of all evidence. Deleted; `audit.py` and
+  validation check 7 now catch this class automatically.
+* **Entity-type blindness**, above.
+* **A regression test earning its keep on day one.** The entity gate labelled
+  an SIAA network an "association" because generic membership vocabulary
+  matched before the network-specific pattern. Caught by
+  `tests/test_entity_gate.py`, fixed by ordering the patterns most-specific
+  first.
+* **Validation catching its own author.** The first run with the entity gate
+  failed three checks, all in newly written code: disqualified companies
+  whose stored arithmetic no longer reconciled, an "unclear" verdict that
+  was disqualifying instead of flagging, and a claim-family regex that read
+  "policy reviews" as a claim about review sites.
+* An enterprise test run scored Elastic 57% on a "support cluster" that
+  title-matching had built out of an FP&A manager and a revenue-ops role;
+  a finance-title guard now excludes those.
+* A first draft of the manual-process detectors matched the `&quot;` HTML
+  entity as the word "quote", which is why every detector runs on extracted
+  visible text, never raw markup.
+
+### Known limit: the heavyweight signals are silent on this niche
+
+`audit.py` reports that `manual_intake`, the hiring signals and
+`review_complaints` fired zero times across 29 companies with 27 readable
+sites. That is not a broken matcher — those sites genuinely have no public
+job boards, no downloadable intake forms, and no reachable review source. It
+is a niche mismatch, and the fix is a live review source rather than a
+reweight. Google Places is wired up (`gather/reviews.py`) and needs
+"Places API (New)" enabled on the key's project; with it, a poorly-rated
+agency with "never called me back" reviews becomes reachable evidence and the
+PASS band becomes attainable for this segment.
 
 ## Validation
 

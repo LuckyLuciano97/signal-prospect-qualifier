@@ -1,0 +1,34 @@
+﻿Signal audit over 29 compan(ies), 48 evidence line(s)
+source: results.jsonl
+
+signal type                fired  companies  % of evidence  weight
+------------------------------------------------------------------------------
+manual_intake                  0          0           0.0%      30  <- never fired
+job_post_pain                  0          0           0.0%      30  <- never fired
+support_role_cluster           0          0           0.0%      30  <- never fired
+data_role_cluster              0          0           0.0%      30  <- never fired
+review_complaints              0          0           0.0%      30  <- never fired
+service_request_manual         4          4           8.3%      26
+quote_phone_only               1          1           2.1%      24
+single_relevant_role           0          0           0.0%      15  <- never fired
+broad_hiring                   0          0           0.0%      12  <- never fired
+capability_gap                 6          6          12.5%      12
+manual_process_language       12         12          25.0%      12
+competitor_gap                 0          0           0.0%       8  <- never fired
+fax_number                    15         15          31.2%       6
+growth_language               10         10          20.8%       5
+
+Most repeated evidence lines (the run's actual vocabulary):
+    9x  contact page still lists a fax number
+    5x  homepage page says "Join Our Team"
+    4x  homepage page still lists a fax number
+    2x  no client login, portal or online bill-pay found across 2 pa
+    2x  about page still lists a fax number
+    2x  no client login, portal or online bill-pay found across 5 pa
+    2x  contact page says "we'll get back to you"
+    2x  careers page says "Join Our Team"
+
+Zero-fire signals: manual_intake, job_post_pain, support_role_cluster, data_role_cluster, review_complaints, single_relevant_role, broad_hiring, competitor_gap
+  27 of 29 compan(ies) had a readable site, so for those the pages were searched and the pattern was absent.
+  Absent pattern on readable pages = niche mismatch (fix the niche playbook).
+  Absent pages = coverage problem (fix the crawl). Do not reweight either one.

@@ -37,6 +37,7 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import re
 from urllib.parse import quote
 
@@ -74,7 +75,7 @@ COMPLAINT_FAMILIES = {
 
 
 def _scan(result: CompanyResult, texts: list[str], source: str, url: str,
-          scanned_label: str) -> bool:
+          scanned_label: str, min_hits: int = MIN_PATTERN_HITS) -> bool:
     """Count complaint families over review texts; emit signals; True if any."""
     found = False
     for family, terms in COMPLAINT_FAMILIES.items():
@@ -86,7 +87,7 @@ def _scan(result: CompanyResult, texts: list[str], source: str, url: str,
             if matched:
                 hits += 1
                 seen_terms.update(matched)
-        if hits >= MIN_PATTERN_HITS:
+        if hits >= min_hits:
             term_list = ", ".join(f"'{t}'" for t in sorted(seen_terms)[:4])
             add_signal(result, "review_complaints", source, url,
                        f"{hits} of the {len(texts)} most recent {scanned_label} "
@@ -218,13 +219,106 @@ def _appstore(client: PoliteClient, result: CompanyResult) -> str:
     return "ok"
 
 
+# -- Google Places (the one live source; official API, key required) --------
+#
+# Auth travels in headers so the key never appears in cached URLs or evidence
+# links. Only the rating, the rating count, and complaint-family counts over
+# the (at most five) review texts the API returns leave this function —
+# review bodies and reviewer identities are never stored. The place must
+# match confidently: a distinctive token of the company name has to appear
+# in the place's display name, or the source is skipped with a note.
+
+GOOGLE_SEARCH = "https://places.googleapis.com/v1/places:searchText"
+GOOGLE_MIN_PATTERN_HITS = 2   # only ~5 texts available; 2 recurring is a pattern
+GOOGLE_LOW_RATING = 3.7
+GOOGLE_MIN_RATINGS = 10
+
+GENERIC_NAME_TOKENS = {"insurance", "agency", "agencies", "group", "inc", "llc",
+                       "the", "and", "of", "company", "associates", "services"}
+
+
+def _match_place(result: CompanyResult, places: list[dict]) -> dict | None:
+    tokens = [t for t in re.split(r"[^a-z0-9]+", result.company.lower())
+              if len(t) > 2 and t not in GENERIC_NAME_TOKENS]
+    for place in places:
+        name = str((place.get("displayName") or {}).get("text") or "").lower()
+        if any(t in name for t in tokens):
+            return place
+    return None
+
+
+def _google(client: PoliteClient, result: CompanyResult) -> str:
+    api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
+    if not api_key:
+        return "skipped"
+    query = " ".join(p for p in (result.company, result.location) if p)
+    try:
+        resp = client.post(
+            GOOGLE_SEARCH, {"textQuery": query},
+            allow_status=(200, 400, 404),
+            extra_headers={
+                "X-Goog-Api-Key": api_key,
+                "X-Goog-FieldMask": "places.id,places.displayName,"
+                                    "places.rating,places.userRatingCount,"
+                                    "places.googleMapsUri",
+            })
+        if resp.status != 200:
+            result.notes.append(f"reviews: Google Places search answered "
+                                f"HTTP {resp.status}; skipped")
+            return "unreachable"
+        place = _match_place(result, resp.json().get("places") or [])
+        if place is None:
+            result.notes.append(f"reviews: no Google place confidently matching "
+                                f"'{result.company}'; skipped")
+            return "none-found"
+        details = client.get(
+            f"https://places.googleapis.com/v1/places/{place['id']}"
+            f"?fields=rating,userRatingCount,reviews,googleMapsUri",
+            allow_status=(200, 400, 404),
+            extra_headers={"X-Goog-Api-Key": api_key})
+        if details.status != 200:
+            result.notes.append(f"reviews: Google place details answered "
+                                f"HTTP {details.status}; skipped")
+            return "unreachable"
+        payload = details.json()
+    except HostBlocked:
+        # For this API a 403 nearly always means "Places API (New) is not
+        # enabled for the key's Google Cloud project", not a crawl block.
+        result.notes.append("reviews: Google Places answered 403 (enable "
+                            "'Places API (New)' for this key's project); skipped")
+        return "blocked"
+    except (PermissionError, RuntimeError, ValueError) as exc:
+        result.notes.append(f"reviews: Google Places lookup failed ({exc})")
+        return "unreachable"
+
+    name = str((place.get("displayName") or {}).get("text") or "place")
+    maps_url = payload.get("googleMapsUri") or place.get("googleMapsUri") or ""
+    rating = payload.get("rating")
+    count = payload.get("userRatingCount") or 0
+    if rating is not None:
+        result.notes.append(f"reviews: Google shows '{name}' rated "
+                            f"{rating:.1f} from {count} review(s)")
+        if rating <= GOOGLE_LOW_RATING and count >= GOOGLE_MIN_RATINGS:
+            add_signal(result, "review_complaints", "Google reviews", maps_url,
+                       f"Google rating is {rating:.1f} out of 5 across {count} "
+                       f"reviews for '{name}'")
+    texts = [str((r.get("text") or {}).get("text") or "")
+             for r in (payload.get("reviews") or [])]
+    texts = [t for t in texts if t][:5]
+    if texts:
+        _scan(result, texts, "Google reviews", maps_url,
+              f"Google reviews of '{name}'", min_hits=GOOGLE_MIN_PATTERN_HITS)
+    return "ok"
+
+
 def gather(client: PoliteClient, result: CompanyResult) -> None:
     trustpilot_status = _trustpilot(client, result)
     appstore_status = _appstore(client, result)
+    google_status = _google(client, result)
 
     # One combined coverage value: "ok" if anything was actually scanned,
-    # otherwise the more informative of the two failure states.
-    statuses = (trustpilot_status, appstore_status)
+    # otherwise the most informative of the failure states.
+    statuses = (google_status, trustpilot_status, appstore_status)
     if "ok" in statuses:
         result.coverage["reviews"] = "ok"
     elif "none-found" in statuses:

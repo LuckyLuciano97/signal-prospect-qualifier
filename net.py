@@ -170,13 +170,24 @@ class PoliteClient:
                 pass  # HTTP-date form; fall through to exponential
         return min(60.0, 2.0 ** attempt)
 
-    def _fetch(self, url: str, allow_status: tuple[int, ...]) -> Response:
-        """The raw fetch loop: throttle, retry 429/5xx, halt host on 403."""
+    def _fetch(self, url: str, allow_status: tuple[int, ...],
+               json_body: dict | None = None,
+               extra_headers: dict | None = None) -> Response:
+        """The raw fetch loop: throttle, retry 429/5xx, halt host on 403.
+
+        ``json_body`` switches the request to POST (needed for the Google
+        Places search endpoint, which has no GET form). The cache key covers
+        the body so different queries never collide. ``extra_headers`` exists
+        so API keys travel in headers, never in URLs — cached files and
+        evidence links must stay free of credentials.
+        """
         host = urlsplit(url).netloc
         if host in self._blocked_hosts:
             raise HostBlocked(f"{host} previously answered 403; not asking again")
 
-        cached = self._read_cache(url)
+        cache_id = url if json_body is None else \
+            url + "#" + json.dumps(json_body, sort_keys=True)
+        cached = self._read_cache(cache_id)
         if cached is not None:
             self.stats["cache"] += 1
             log.debug("CACHE %s %s", cached.status, url)
@@ -190,7 +201,13 @@ class PoliteClient:
             self._throttle(host)
             started = time.monotonic()
             try:
-                resp = self.session.get(url, timeout=config.HTTP_TIMEOUT)
+                if json_body is None:
+                    resp = self.session.get(url, timeout=config.HTTP_TIMEOUT,
+                                            headers=extra_headers)
+                else:
+                    resp = self.session.post(url, json=json_body,
+                                             timeout=config.HTTP_TIMEOUT,
+                                             headers=extra_headers)
             except requests.RequestException as exc:
                 last_error = f"{type(exc).__name__}: {exc}"
                 log.warning("REQERR attempt %d/%d %s -> %s", attempt, MAX_ATTEMPTS, url, last_error)
@@ -223,14 +240,17 @@ class PoliteClient:
                 raise RuntimeError(f"unexpected HTTP {resp.status_code} from {url}")
 
             fetched_at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-            log.info("GET %s %s (%.2fs, %d bytes)", resp.status_code, url, elapsed, len(resp.content))
-            self._write_cache(url, resp.status_code, resp.text, fetched_at)
+            log.info("%s %s %s (%.2fs, %d bytes)",
+                     "POST" if json_body is not None else "GET",
+                     resp.status_code, url, elapsed, len(resp.content))
+            self._write_cache(cache_id, resp.status_code, resp.text, fetched_at)
             return Response(url, resp.status_code, resp.text, False, fetched_at)
 
         self.stats["failures"] += 1
         raise RuntimeError(f"giving up on {url} after {MAX_ATTEMPTS} attempts: {last_error}")
 
-    def get(self, url: str, allow_status: tuple[int, ...] = (200, 404)) -> Response:
+    def get(self, url: str, allow_status: tuple[int, ...] = (200, 404),
+            extra_headers: dict | None = None) -> Response:
         """GET ``url`` if robots.txt permits it.
 
         Raises PermissionError when robots.txt disallows the path — callers
@@ -240,7 +260,18 @@ class PoliteClient:
             self.stats["robots_disallowed"] += 1
             log.info("ROBOTS disallows %s — skipping", url)
             raise PermissionError(f"robots.txt of {urlsplit(url).netloc} disallows {url}")
-        return self._fetch(url, allow_status)
+        return self._fetch(url, allow_status, extra_headers=extra_headers)
+
+    def post(self, url: str, json_body: dict,
+             allow_status: tuple[int, ...] = (200,),
+             extra_headers: dict | None = None) -> Response:
+        """POST a JSON body, same politeness rules as get()."""
+        if not self.allowed_by_robots(url):
+            self.stats["robots_disallowed"] += 1
+            log.info("ROBOTS disallows %s — skipping", url)
+            raise PermissionError(f"robots.txt of {urlsplit(url).netloc} disallows {url}")
+        return self._fetch(url, allow_status, json_body=json_body,
+                           extra_headers=extra_headers)
 
 
 def setup_logging(logfile: Path | None = None, verbose: bool = False) -> None:

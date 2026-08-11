@@ -1,35 +1,38 @@
 {
-  "finished_at": "2026-08-11 00:22 UTC",
-  "input": "input_example.csv",
-  "companies": 12,
+  "finished_at": "2026-08-11 13:32 UTC",
+  "input": "input_all.csv",
+  "companies": 29,
   "bands": {
     "PASS": 0,
     "MAYBE": 2,
-    "FAIL": 10
+    "FAIL": 22,
+    "REVIEW": 2,
+    "DISQUALIFIED": 3
   },
-  "signals_total": 32,
+  "signals_total": 48,
   "openers_drafted": 2,
-  "partial_coverage_companies": 12,
+  "partial_coverage_companies": 24,
   "modules": {
+    "entity": true,
     "site": true,
     "hiring": true,
     "reviews": true,
     "competitive": true
   },
   "http": {
-    "network": 5,
-    "cache": 141,
-    "retries": 0,
-    "failures": 5,
-    "robots_disallowed": 24,
-    "blocked_403": 0
+    "network": 6,
+    "cache": 304,
+    "retries": 12,
+    "failures": 9,
+    "robots_disallowed": 48,
+    "blocked_403": 1
   },
   "llm": {
     "model": "claude-opus-5",
-    "calls": 14,
-    "cache_hits": 0,
-    "input_tokens": 21507,
-    "output_tokens": 3938
+    "calls": 0,
+    "cache_hits": 48,
+    "input_tokens": 0,
+    "output_tokens": 0
   },
-  "elapsed_seconds": 103.5
+  "elapsed_seconds": 42.9
 }
