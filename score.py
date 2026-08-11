@@ -67,7 +67,11 @@ Your job:
    rule-computed base score. Adjust for what the rules cannot read: signals
    that are formally present but irrelevant to what this company does deserve
    a negative adjustment; several independent signals pointing at the same
-   pain deserve a positive one. 0 is a perfectly good answer.
+   pain deserve a positive one. Use the user-supplied team size the same way:
+   hiring clusters at a large company usually mean in-house build capacity
+   (adjust down), while manual-process markers at a small company mean there
+   is no one whose job it is to fix them (they corroborate each other).
+   0 is a perfectly good answer.
 3. cited: the ids of the signals your adjustment and reasoning rest on. Cite
    only ids that exist. If you cite nothing, your adjustment must be <= 0.
 4. reasoning: one plain sentence a reviewer reads to decide whether to trust
@@ -76,16 +80,20 @@ Your job:
 
 
 def _weigh(result: CompanyResult) -> int:
-    """Fill per-signal weights and return the capped rule base."""
+    """Fill per-signal weights and return the capped rule base.
+
+    Kept deliberately in lock-step with validate.recomputed_base, which
+    re-derives this arithmetic independently from the stored signals.
+    """
     counted: set[str] = set()
-    gap_total = 0
+    stacked: dict[str, int] = {}
     base = 0
     for signal in result.signals:
         weight = config.SIGNAL_WEIGHTS.get(signal.type, 0)
-        if signal.type == "capability_gap":
-            allowed = max(0, config.CAPABILITY_GAP_STACK_CAP - gap_total)
+        if signal.type in config.STACK_CAPS:
+            allowed = max(0, config.STACK_CAPS[signal.type] - stacked.get(signal.type, 0))
             weight = min(weight, allowed)
-            gap_total += weight
+            stacked[signal.type] = stacked.get(signal.type, 0) + weight
         elif signal.type in counted:
             weight = 0  # same type found twice counts once; shown as 0 in the breakdown
         counted.add(signal.type)
@@ -139,6 +147,7 @@ def score_company(result: CompanyResult, engine: AnthropicEngine | None) -> None
             for s in result.signals)
         user = (f"Company: {result.company}\nDomain: {result.domain}\n"
                 f"Industry (from the user's list): {result.industry or 'not given'}\n"
+                f"Team size (from the user's list): {result.team_size or 'not given'}\n"
                 f"Scraped self-description:\n{result.description or '(site unreachable)'}\n\n"
                 f"Signals found (the complete list):\n{evidence}\n\n"
                 f"Rule-computed base score: {result.base_score}/100")

@@ -33,6 +33,7 @@ class CompanyResult:
     company: str
     domain: str
     industry: str = ""
+    team_size: str = ""   # user-supplied headcount; context for the qualifier, never gathered
     # Contact passthrough from the user's own export. Never gathered, never
     # enriched; it goes straight back out in results.csv untouched.
     contact_name: str = ""

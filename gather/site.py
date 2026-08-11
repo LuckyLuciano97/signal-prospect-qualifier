@@ -63,6 +63,31 @@ GROWTH_RE = re.compile(
     re.IGNORECASE,
 )
 
+# Manual-process markers: the company's own visible copy describing a
+# process a person performs by hand. Each marker found becomes one signal
+# quoting the phrase (never numbers — a fax signal says "lists a fax
+# number", it does not store the number). Added after the first SMB run:
+# tiny service businesses have no job boards and no review pages, so the
+# way they describe their own workflow is the strongest public signal left.
+MANUAL_MARKERS = {
+    "call-for-quote": re.compile(
+        r"(?:call|contact|phone)(?: us)?[^.!?]{0,40}?for (?:a |your |free |an )*quot(?:e|ation)s?\b",
+        re.IGNORECASE),
+    "we-will-get-back": re.compile(
+        r"(?:we[’']ll|we will) (?:get back to you|be in touch|reach out|contact you)",
+        re.IGNORECASE),
+    "fax": re.compile(r"\bfax\b", re.IGNORECASE),
+}
+
+# Any of these in visible text or an href means the company offers some
+# self-serve login; its absence across every page checked is a capability
+# gap. Matching is deliberately broad because it errs toward *suppressing*
+# the gap claim, never toward inventing one.
+PORTAL_RE = re.compile(
+    r"\b(?:log ?in|sign ?in|portal|my account|client (?:center|login|area)"
+    r"|policyholder)\b", re.IGNORECASE)
+PORTAL_HREF_RE = re.compile(r"login|signin|sign-in|portal|account", re.IGNORECASE)
+
 BOARD_LINK_RE = re.compile(
     r"(?:job-boards|boards)\.(?:eu\.)?greenhouse\.io/(?:embed/job_board\?for=)?([A-Za-z0-9._-]+)"
     r"|jobs\.(?:eu\.)?lever\.co/([A-Za-z0-9._-]+)",
@@ -230,6 +255,32 @@ def gather(client: PoliteClient, result: CompanyResult) -> dict:
                 f"contact page offers only {channel}; no phone number or live "
                 f"channel found on it",
             )
+
+    # -- capability gap: no self-serve login/portal anywhere ---------------
+    has_portal = any(PORTAL_RE.search(text) for text in texts.values()) or \
+        any(PORTAL_HREF_RE.search(a.get("href", ""))
+            for html_body in pages.values()
+            for a in BeautifulSoup(html_body, "html.parser").find_all("a", href=True))
+    if not has_portal:
+        add_signal(
+            result, "capability_gap", "site", homepage.url,
+            f"no client login or self-serve portal found across "
+            f"{len(pages)} page(s) checked",
+        )
+
+    # -- manual-process language -------------------------------------------
+    for marker, pattern in MANUAL_MARKERS.items():
+        for name, text in texts.items():
+            match = pattern.search(text)
+            if not match:
+                continue
+            if marker == "fax":
+                detail = f"{name} page lists a fax number"
+            else:
+                detail = f'{name} page says "{match.group(0)}"'
+            add_signal(result, "manual_process_language", "site",
+                       page_urls[name], detail)
+            break
 
     # -- growth language ---------------------------------------------------
     for name, text in texts.items():

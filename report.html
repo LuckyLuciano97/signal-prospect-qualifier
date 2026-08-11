@@ -48,178 +48,102 @@ h1 { font-size: 20px; margin-bottom: 2px; }
 </style></head>
 <body><div class="wrap">
 <h1>Signal — prospect qualification run</h1>
-<div class="sub">input_example.csv · 2026-08-06 11:18 UTC
+<div class="sub">input_example.csv · 2026-08-11 00:22 UTC
  · model: claude-opus-5
  · every score is the sum of the weighted signals listed under it; companies with no
  gathered evidence are 0% by construction, not judgement.</div>
-<div class="strip"><div class="stat"><b>12</b><span>companies</span></div><div class="stat"><b>4</b><span>pass</span></div><div class="stat"><b>2</b><span>maybe</span></div><div class="stat"><b>6</b><span>fail</span></div><div class="stat"><b>44</b><span>signals found</span></div><div class="stat coverage-warn"><b>12</b><span>partial coverage</span></div></div>
+<div class="strip"><div class="stat"><b>12</b><span>companies</span></div><div class="stat"><b>0</b><span>pass</span></div><div class="stat"><b>2</b><span>maybe</span></div><div class="stat"><b>10</b><span>fail</span></div><div class="stat"><b>32</b><span>signals found</span></div><div class="stat coverage-warn"><b>12</b><span>partial coverage</span></div></div>
 
 <div class="card">
   <div class="scorebox">
     <div class="rank">#1</div>
-    <div class="pct" style="color:#15803d">80%</div>
-    <span class="band" style="color:#15803d;background:#dcfce7">PASS</span>
+    <div class="pct" style="color:#b45309">50%</div>
+    <span class="band" style="color:#b45309;background:#fef3c7">MAYBE</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://braze.com">Braze</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">braze.com</span></div>
+    <div class="name"><a href="https://jacobsinsurance.com">Jacobs Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">jacobsinsurance.com</span></div>
     <div class="offer">Fits: <b>triage_agent</b> — AI support triage agent (classifies, routes and drafts replies to support tickets)</div>
-    <div class="math">score = 85 from rule weights -5 model adjustment (cap ±15)</div>
-    <div class="reason">18 open support roles and a Technical Support Specialist post naming high-volume inquiry/escalation pressure genuinely point at ticket triage, but s1 (no chat widget) is meaningless for a vendor that gates support behind a customer portal and itself ships AI agents and orchestration, and the 261-role headcount suggests in-house build capacity rather than an outsourced automation buy.</div>
-    
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 5 page(s) checked (about, careers, contact, homepage, services) <span class="w">+12</span> <a href="https://braze.com">source</a></li><li><span class="src">site</span>contact page says &quot;join our team&quot; <span class="w">+5</span> <a href="https://braze.com/company/contact">source</a></li><li><span class="src">greenhouse board</span>18 open support/customer roles: Technical Support Specialist; Customer Success Manager II, Retail; Support Engagement Lead; Support Engagement Lead (+14 more) <span class="w">+30</span> <a href="https://job-boards.greenhouse.io/braze">source</a></li><li><span class="src">greenhouse board</span>3 open data/ops/analyst roles: Senior Software Engineer I, Reporting; Senior Sales Data Analyst; Senior Marketing Data Analyst <span class="w">+30</span> <a href="https://job-boards.greenhouse.io/braze">source</a></li><li><span class="src">greenhouse board</span>261 open roles across 13 departments/teams <span class="w">+12</span> <a href="https://job-boards.greenhouse.io/braze">source</a></li><li><span class="src">greenhouse job post</span>job text names the pain - &quot;Technical Support Specialist&quot;: &quot;...ively Skilled at managing and prioritizing a high volume of inquiries and escalations; resilient and calm under pr...&quot; <span class="w">+30</span> <a href="https://boards.greenhouse.io/braze/jobs/7696789?gh_jid=7696789">source</a></li></ul>
-    <div class="opener"><span class="label">Draft opener (grounded in s3, s6, s2, s1)</span>You have 18 open support and customer roles right now, and the Technical Support Specialist post asks for someone skilled at managing a high volume of inquiries and escalations while staying calm under pressure. Meanwhile the contact page points to &quot;join our team&quot; and none of the five pages I checked had a live chat or support widget.</div>
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>ok</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="math">score = 48 from rule weights +2 model adjustment (cap ±15)</div>
+    <div class="reason">An 8-person independent agency with no chat widget or portal, a &quot;we&#x27;ll get back to you&quot; contact promise and a live fax number shows inbound quote/service requests are handled by hand with no in-house staff to automate them, which fits support triage/drafting; the signals are all absence-based site heuristics, so only a small positive adjustment is warranted.</div>
+    <div class="contact">From your list: team of 8</div>
+    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 4 page(s) checked (about, contact, homepage, services) <span class="w">+12</span> <a href="https://jacobsinsurance.com">source</a></li><li><span class="src">site</span>no client login or self-serve portal found across 4 page(s) checked <span class="w">+12</span> <a href="https://jacobsinsurance.com">source</a></li><li><span class="src">site</span>contact page says &quot;we&#x27;ll get back to you&quot; <span class="w">+12</span> <a href="https://jacobsinsurance.com/contact/owosso">source</a></li><li><span class="src">site</span>contact page lists a fax number <span class="w">+12</span> <a href="https://jacobsinsurance.com/contact/owosso">source</a></li></ul>
+    <div class="opener"><span class="label">Draft opener (grounded in s2, s3, s4)</span>Your contact page still routes people to a form that promises you&#x27;ll get back to them, with a fax number listed alongside it, and I didn&#x27;t find a client login or self-serve portal on the pages I looked at. That setup suggests most policy questions and certificate requests land in someone&#x27;s inbox before anyone can act on them.</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: jacobsinsurance, jacobsinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
     <div class="rank">#2</div>
-    <div class="pct" style="color:#15803d">75%</div>
-    <span class="band" style="color:#15803d;background:#dcfce7">PASS</span>
+    <div class="pct" style="color:#b45309">44%</div>
+    <span class="band" style="color:#b45309;background:#fef3c7">MAYBE</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://robinhood.com">Robinhood</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">robinhood.com</span></div>
-    <div class="offer">Fits: <b>triage_agent</b> — AI support triage agent (classifies, routes and drafts replies to support tickets)</div>
-    <div class="math">score = 85 from rule weights -10 model adjustment (cap ±15)</div>
-    <div class="reason">Nine open customer-experience roles (s3) point at support-ticket volume that a triage agent could address, but the surrounding evidence — 129 roles across 46 departments (s5), only incidental data roles in HR analytics and tax ops (s4), and a &#x27;no chat widget&#x27; flag (s1) that is meaningless for a regulated broker whose support lives inside its app — describes a large enterprise that builds this in-house rather than a buyer for a small studio.</div>
-    <div class="contact">Contact (from your list): Jordan Example · Support Operations Lead · jordan@example.com</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 5 page(s) checked (about, careers, contact, homepage, services) <span class="w">+12</span> <a href="https://robinhood.com">source</a></li><li><span class="src">site</span>careers page says &quot;Open Roles&quot; <span class="w">+5</span> <a href="https://robinhood.com/careers">source</a></li><li><span class="src">greenhouse board</span>9 open support/customer roles: Customer Experience Team Lead; Customer Experience Representative, Advanced Services; Customer Experience Representative, Concierge; Customer Experience Representative, Core Services (+5 more) <span class="w">+30</span> <a href="https://job-boards.greenhouse.io/robinhood">source</a></li><li><span class="src">greenhouse board</span>2 open data/ops/analyst roles: Staff Data Scientist, ML (People Analytics &amp; Insights); Senior Tax Operations Analyst <span class="w">+30</span> <a href="https://job-boards.greenhouse.io/robinhood">source</a></li><li><span class="src">greenhouse board</span>129 open roles across 46 departments/teams <span class="w">+12</span> <a href="https://job-boards.greenhouse.io/robinhood">source</a></li></ul>
-    <div class="opener"><span class="label">Draft opener (grounded in s1, s3)</span>You have nine open customer experience roles right now, from team lead down to concierge and core services reps, and none of the five pages I checked had a live chat or support widget in the HTML. Reading those two together, it looks like support volume is being met by adding people rather than by anything sitting in front of the queue.</div>
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>ok</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="name"><a href="https://beck-insurance.com">Beck Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">beck-insurance.com</span></div>
+    <div class="offer">Fits: <b>general_automation</b> — workflow automation for repetitive manual back-office processes</div>
+    <div class="math">score = 48 from rule weights -4 model adjustment (cap ±15)</div>
+    <div class="reason">A 5-person independent insurance agency with only manual-intake markers (&quot;we will be in touch&quot;, a fax number) and two absence-of-feature gaps (no chat widget, no client portal) — the manual markers are credible at this headcount since nobody owns process improvement, but the capability gaps are generic website omissions rather than evidence of a measured volume pain, and nothing indicates ticket or data volume, so the fit is generic back-office workflow automation around quote/claim intake at a slightly discounted confidence.</div>
+    <div class="contact">From your list: team of 5</div>
+    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 3 page(s) checked (about, contact, homepage) <span class="w">+12</span> <a href="https://beck-insurance.com">source</a></li><li><span class="src">site</span>no client login or self-serve portal found across 3 page(s) checked <span class="w">+12</span> <a href="https://beck-insurance.com">source</a></li><li><span class="src">site</span>homepage page says &quot;we will be in touch&quot; <span class="w">+12</span> <a href="https://beck-insurance.com">source</a></li><li><span class="src">site</span>about page lists a fax number <span class="w">+12</span> <a href="https://beck-insurance.com/about-us/">source</a></li></ul>
+    <div class="opener"><span class="label">Draft opener (grounded in s3, s2, s1)</span>Your homepage tells visitors &quot;we will be in touch,&quot; and across your homepage, about, and contact pages I could not find a client login or any chat option. So every quote request and policy question seems to land with someone on your team to answer by hand.</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: beck-insurance, beckinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
     <div class="rank">#3</div>
-    <div class="pct" style="color:#15803d">73%</div>
-    <span class="band" style="color:#15803d;background:#dcfce7">PASS</span>
+    <div class="pct" style="color:#4b5563">34%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://workato.com">Workato</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">workato.com</span></div>
-    <div class="offer">Fits: <b>triage_agent</b> — AI support triage agent (classifies, routes and drafts replies to support tickets)</div>
-    <div class="math">score = 85 from rule weights -12 model adjustment (cap ±15)</div>
-    <div class="reason">The support-side signals (5 open support/CS roles and a Support Account Manager post naming response time, backlog age and reopen rate) do point at ticket triage pain, but Workato is itself a 14,000-connector iPaaS/agent-orchestration vendor with 167 open roles, so it builds this class of automation in-house, and the capability-gap flags (no chat widget, form-only contact) are normal enterprise sales design rather than real gaps.</div>
+    <div class="name"><a href="https://minorinsurance.com">Minor Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">minorinsurance.com</span></div>
+    <div class="offer">Fits: <b>general_automation</b> — workflow automation for repetitive manual back-office processes</div>
+    <div class="math">score = 41 from rule weights -7 model adjustment (cap ±15)</div>
+    <div class="reason">The only evidence is absence of a chat widget and client portal plus a generic &quot;contact us for a free quote&quot; line and a &quot;Join Our Team&quot; recruiting link, which indicate manual inbound quote intake across seven offices but are website-feature absences rather than stated operational pain, and the 41-person agency shows no data, ticketing or reporting-specific signals, so the case is thin and I scored it down.</div>
+    <div class="contact">From your list: team of 41</div>
+    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 3 page(s) checked (about, contact, homepage) <span class="w">+12</span> <a href="https://minorinsurance.com">source</a></li><li><span class="src">site</span>no client login or self-serve portal found across 3 page(s) checked <span class="w">+12</span> <a href="https://minorinsurance.com">source</a></li><li><span class="src">site</span>about page says &quot;Contact Minor Insurance for a free quote&quot; <span class="w">+12</span> <a href="https://minorinsurance.com/about/">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://minorinsurance.com">source</a></li></ul>
     
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 5 page(s) checked (about, careers, contact, homepage, services) <span class="w">+12</span> <a href="https://workato.com">source</a></li><li><span class="src">site</span>contact page offers only a contact form; no phone number or live channel found on it <span class="w">+12</span> <a href="https://workato.com/request_demo">source</a></li><li><span class="src">site</span>careers page says &quot;Open Positions&quot; <span class="w">+5</span> <a href="https://workato.com/careers">source</a></li><li><span class="src">greenhouse board</span>5 open support/customer roles: Senior Business Technology Support Analyst; Support Account Manager; Enterprise Customer Success Manager; Senior Enterprise Customer Success Manager (+1 more) <span class="w">+30</span> <a href="https://job-boards.greenhouse.io/workato">source</a></li><li><span class="src">greenhouse board</span>2 open data/ops/analyst roles: Partner Operations Analyst; Sales Operations Analyst <span class="w">+30</span> <a href="https://job-boards.greenhouse.io/workato">source</a></li><li><span class="src">greenhouse board</span>167 open roles across 9 departments/teams <span class="w">+12</span> <a href="https://job-boards.greenhouse.io/workato">source</a></li><li><span class="src">greenhouse job post</span>job text names the pain - &quot;Support Account Manager&quot;: &quot;...experience: response time, resolution time, backlog age, reopen rate, and customer-reported sati...&quot; <span class="w">+30</span> <a href="https://www.workato.com/careers?gh_jid=8647724002#open-roles">source</a></li></ul>
-    <div class="opener"><span class="label">Draft opener (grounded in s4, s7, s2)</span>You have five support and customer roles open right now, and the Support Account Manager post spells out what is being measured: response time, resolution time, backlog age, reopen rate. Meanwhile the contact page routes everything through a form, with no phone number or live channel on it.</div>
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>ok</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: minorinsurance, minorinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
     <div class="rank">#4</div>
-    <div class="pct" style="color:#15803d">71%</div>
-    <span class="band" style="color:#15803d;background:#dcfce7">PASS</span>
+    <div class="pct" style="color:#4b5563">30%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://samsara.com">Samsara</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">samsara.com</span></div>
+    <div class="name"><a href="https://westgateagency.com">Westgate Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">westgateagency.com</span></div>
     <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 85 from rule weights -14 model adjustment (cap ±15)</div>
-    <div class="reason">The high base score rests on scale artifacts of a very large enterprise SaaS company — 296 open roles across 49 teams, 34 of which are enterprise Customer Success (account management, not ticket triage) and 10 senior Data Engineer/Data Ops roles building their own platform, not signs of manual spreadsheet work — while the missing chat widget on an enterprise telematics site is irrelevant, so no offer is genuinely supported.</div>
-    <div class="contact">Contact (from your list): Alex Example · Head of Support · alex@example.com</div>
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 5 page(s) checked (about, careers, contact, homepage, services) <span class="w">+12</span> <a href="https://samsara.com">source</a></li><li><span class="src">site</span>careers page says &quot;Open Roles&quot; <span class="w">+5</span> <a href="https://samsara.com/company/careers">source</a></li><li><span class="src">greenhouse board</span>34 open support/customer roles: Strategic Customer Success Manager; Enterprise Customer Success Manager - Public Sector; Enterprise Customer Success Manager; Manager II, Customer Success (+30 more) <span class="w">+30</span> <a href="https://job-boards.greenhouse.io/samsara">source</a></li><li><span class="src">greenhouse board</span>10 open data/ops/analyst roles: Senior Data Engineer; Senior Data Engineer; Sr. Data Ops Engineer; Senior Data Engineer II (+6 more) <span class="w">+30</span> <a href="https://job-boards.greenhouse.io/samsara">source</a></li><li><span class="src">greenhouse board</span>296 open roles across 49 departments/teams <span class="w">+12</span> <a href="https://job-boards.greenhouse.io/samsara">source</a></li></ul>
-    <div class="opener"><span class="label">Draft opener (grounded in s3, s4, s5)</span>Your Greenhouse board has 34 open support and customer success roles right now, alongside 10 data and ops engineering openings, out of 296 postings across 49 teams. That volume of customer-facing hiring at once usually means the work is arriving faster than the current team can absorb it.</div>
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>ok</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="math">score = 36 from rule weights -6 model adjustment (cap ±15)</div>
+    <div class="reason">All three signals are thin absence-of-feature markers from a single scraped page whose content was mostly CSS junk, and the only manual-process cue (&quot;We will get back to you&quot;) is boilerplate contact-form text, so there is no evidence of a specific inbound volume or data pain to map to an offer despite the small team implying no in-house fixer.</div>
+    <div class="contact">From your list: team of 7</div>
+    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 1 page(s) checked (homepage) <span class="w">+12</span> <a href="https://westgateagency.com">source</a></li><li><span class="src">site</span>no client login or self-serve portal found across 1 page(s) checked <span class="w">+12</span> <a href="https://westgateagency.com">source</a></li><li><span class="src">site</span>homepage page says &quot;We will get back to you&quot; <span class="w">+12</span> <a href="https://westgateagency.com">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: westgateagency, westgateinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
     <div class="rank">#5</div>
-    <div class="pct" style="color:#b45309">64%</div>
-    <span class="band" style="color:#b45309;background:#fef3c7">MAYBE</span>
-  </div>
-  <div class="body">
-    <div class="name"><a href="https://klaviyo.com">Klaviyo</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">klaviyo.com</span></div>
-    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 77 from rule weights -13 model adjustment (cap ±15)</div>
-    <div class="reason">The only signals are hiring clusters (4 support, 8 data/analytics roles) inside 147 open roles at a large marketing-automation vendor that itself sells AI service and data-platform products, so the clusters reflect scale-up growth and in-house capability rather than an outsourceable pain, and they point at two different offers at once.</div>
-    
-    <ul class="evidence"><li><span class="src">site</span>careers page says &quot;open roles&quot; <span class="w">+5</span> <a href="https://www.klaviyo.com/careers">source</a></li><li><span class="src">greenhouse board</span>4 open support/customer roles: Senior Customer Success Manager - Commercial; Manager, Customer Success - Mid-Enterprise (Northern); Customer Support Specialist, German (Weekend Shift); Customer Support Specialist, Bilingual English &amp; Japanese <span class="w">+30</span> <a href="https://job-boards.greenhouse.io/klaviyo">source</a></li><li><span class="src">greenhouse board</span>8 open data/ops/analyst roles: Analytics Engineer; Software Engineer - Advanced Reporting; Lead Data Science Analyst, GTM Strategic Analytics and Insights; Lead Data Science Analyst, GTM Strategic Analytics and Insights (+4 more) <span class="w">+30</span> <a href="https://job-boards.greenhouse.io/klaviyo">source</a></li><li><span class="src">greenhouse board</span>147 open roles across 12 departments/teams <span class="w">+12</span> <a href="https://job-boards.greenhouse.io/klaviyo">source</a></li></ul>
-    <div class="opener"><span class="label">Draft opener (grounded in s2, s3, s4)</span>Your Greenhouse board lists 147 open roles across 12 teams right now, including four in customer support and success and eight more in data and analytics. Hiring at that spread usually means a lot of coordination work landing on people before the new hires arrive.</div>
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>ok</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">site: live chat/support widget present (HubSpot)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
-  </div>
-</div>
-<div class="card">
-  <div class="scorebox">
-    <div class="rank">#6</div>
-    <div class="pct" style="color:#b45309">49%</div>
-    <span class="band" style="color:#b45309;background:#fef3c7">MAYBE</span>
-  </div>
-  <div class="body">
-    <div class="name"><a href="https://fivetran.com">Fivetran</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">fivetran.com</span></div>
-    <div class="offer">Fits: <b>triage_agent</b> — AI support triage agent (classifies, routes and drafts replies to support tickets)</div>
-    <div class="math">score = 59 from rule weights -10 model adjustment (cap ±15)</div>
-    <div class="reason">The only pain-specific signal is a 3-role customer support engineering cluster (s3), which nominally points to support triage, but the company is a large-scale automated data movement vendor hiring 202 roles across 15 teams (s4) — so it builds and sells data pipelines itself, and the missing chat widget (s1) is meaningless for an enterprise with a full support org, making this a poor-fit prospect for a small studio.</div>
-    
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 4 page(s) checked (about, careers, contact, homepage) <span class="w">+12</span> <a href="https://fivetran.com">source</a></li><li><span class="src">site</span>careers page says &quot;open roles&quot; <span class="w">+5</span> <a href="https://fivetran.com/careers">source</a></li><li><span class="src">greenhouse board</span>3 open support/customer roles: Customer Support Engineer; Customer Support Engineer; Manager, Customer Support Engineering <span class="w">+30</span> <a href="https://job-boards.greenhouse.io/fivetran">source</a></li><li><span class="src">greenhouse board</span>202 open roles across 15 departments/teams <span class="w">+12</span> <a href="https://job-boards.greenhouse.io/fivetran">source</a></li></ul>
-    <div class="opener"><span class="label">Draft opener (grounded in s1, s3)</span>Your Greenhouse board has three open support roles right now, including a Manager, Customer Support Engineering, and none of the four pages I looked at (homepage, about, careers, contact) had a chat or support widget in the HTML. Hiring the support layer before the self serve layer usually means the queue is where the pressure lands first.</div>
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>ok</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
-  </div>
-</div>
-<div class="card">
-  <div class="scorebox">
-    <div class="rank">#7</div>
-    <div class="pct" style="color:#4b5563">30%</div>
+    <div class="pct" style="color:#4b5563">24%</div>
     <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://gopuff.com">Gopuff</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">gopuff.com</span></div>
-    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 42 from rule weights -12 model adjustment (cap ±15)</div>
-    <div class="reason">The only evidence is generic hiring activity — two data roles inside an 808-role, 26-department hiring wave at a large delivery company with an unreachable site — which shows in-house data capacity being built rather than any specific outsourceable pain, so no offer is supported.</div>
-    
-    <ul class="evidence"><li><span class="src">lever board</span>2 open data/ops/analyst roles: Data Engineer; Lead Data Analyst <span class="w">+30</span> <a href="https://jobs.lever.co/gopuff">source</a></li><li><span class="src">lever board</span>808 open roles across 26 departments/teams <span class="w">+12</span> <a href="https://jobs.lever.co/gopuff">source</a></li></ul>
-    
-    <div class="meta">Coverage: site <span class="bad">blocked</span> · hiring <span>ok</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">site: 403 Forbidden from gopuff.com. Noted; no evasion attempted.<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
-  </div>
-</div>
-<div class="card">
-  <div class="scorebox">
-    <div class="rank">#8</div>
-    <div class="pct" style="color:#4b5563">29%</div>
-    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
-  </div>
-  <div class="body">
-    <div class="name"><a href="https://elastic.co">Elastic</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">elastic.co</span></div>
-    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 41 from rule weights -12 model adjustment (cap ±15)</div>
-    <div class="reason">The only signals are generic site-surface gaps (no chat widget, form-only contact page) that mean nothing for a large enterprise search/observability vendor with its own support portal, plus a boilerplate &#x27;open roles&#x27; phrase and a 235-role/79-team hiring footprint that indicates a company far too large and technically self-sufficient to name a specific automation pain from this evidence.</div>
-    
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 5 page(s) checked (about, careers, contact, homepage, services) <span class="w">+12</span> <a href="https://elastic.co">source</a></li><li><span class="src">site</span>contact page offers only a contact form; no phone number or live channel found on it <span class="w">+12</span> <a href="https://elastic.co/contact">source</a></li><li><span class="src">site</span>careers page says &quot;open roles&quot; <span class="w">+5</span> <a href="https://elastic.co/careers">source</a></li><li><span class="src">greenhouse board</span>235 open roles across 79 departments/teams <span class="w">+12</span> <a href="https://job-boards.greenhouse.io/elastic">source</a></li></ul>
-    
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>ok</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
-  </div>
-</div>
-<div class="card">
-  <div class="scorebox">
-    <div class="rank">#9</div>
-    <div class="pct" style="color:#4b5563">19%</div>
-    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
-  </div>
-  <div class="body">
-    <div class="name"><a href="https://navan.com">Navan</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">navan.com</span></div>
-    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 29 from rule weights -10 model adjustment (cap ±15)</div>
-    <div class="reason">The only findings are absence of a chat widget or phone number on the marketing site plus a generic &quot;Join our team&quot; line, which say nothing about internal manual work at a large all-in-one travel and expense platform that runs its own in-product support, so no offer is supported.</div>
-    
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 5 page(s) checked (about, careers, contact, homepage, services) <span class="w">+12</span> <a href="https://navan.com">source</a></li><li><span class="src">site</span>contact page offers only a contact form; no phone number or live channel found on it <span class="w">+12</span> <a href="https://navan.com/contact">source</a></li><li><span class="src">site</span>homepage page says &quot;Join our team&quot; <span class="w">+5</span> <a href="https://navan.com">source</a></li></ul>
+    <div class="name"><a href="https://michigancommunity.com">Michigan Community Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">michigancommunity.com</span></div>
+    <div class="offer">Fits: <b>general_automation</b> — workflow automation for repetitive manual back-office processes</div>
+    <div class="math">score = 29 from rule weights -5 model adjustment (cap ±15)</div>
+    <div class="reason">The only real evidence is a fax number on the contact page and the absence of a chat widget, which is normal for a phone-first local insurance agency and not proof of a specific automation pain, so the paperwork-heavy quoting/policy work points loosely at general back-office automation but the signal set is too thin to support the base score.</div>
+    <div class="contact">From your list: team of 47</div>
+    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 5 page(s) checked (about, careers, contact, homepage, services) <span class="w">+12</span> <a href="https://michigancommunity.com">source</a></li><li><span class="src">site</span>contact page lists a fax number <span class="w">+12</span> <a href="https://michigancommunity.com/other/contact_us.aspx">source</a></li><li><span class="src">site</span>careers page says &quot;join our team&quot; <span class="w">+5</span> <a href="https://michigancommunity.com/other/careers_with_michigan_community_insurance_agency.aspx">source</a></li></ul>
     
     <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
     <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
@@ -227,21 +151,97 @@ h1 { font-size: 20px; margin-bottom: 2px; }
 </div>
 <div class="card">
   <div class="scorebox">
-    <div class="rank">#10</div>
-    <div class="pct" style="color:#4b5563">12%</div>
+    <div class="rank">#6</div>
+    <div class="pct" style="color:#4b5563">23%</div>
     <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://basecamp.com">Basecamp</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">basecamp.com</span></div>
+    <div class="name"><a href="https://moonadrion.com">Moon and Adrion Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">moonadrion.com</span></div>
+    <div class="offer">Fits: <b>general_automation</b> — workflow automation for repetitive manual back-office processes</div>
+    <div class="math">score = 29 from rule weights -6 model adjustment (cap ±15)</div>
+    <div class="reason">The only evidence is boilerplate website copy — an absent chat widget, a standard &quot;Contact us for a quote&quot; call to action, and a generic careers link — which is normal for any small independent insurance agency and gives no direct indication of ticket volume, spreadsheet work, or a specific manual bottleneck, so the manual inbound quote intake at this 17-person agency is at best a weak, unconfirmed hook for general workflow automation.</div>
+    <div class="contact">From your list: team of 17</div>
+    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 4 page(s) checked (about, contact, homepage, services) <span class="w">+12</span> <a href="https://moonadrion.com">source</a></li><li><span class="src">site</span>homepage page says &quot;Contact us for a quote&quot; <span class="w">+12</span> <a href="https://moonadrion.com">source</a></li><li><span class="src">site</span>homepage page says &quot;join Our Team&quot; <span class="w">+5</span> <a href="https://moonadrion.com">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: moonadrion, moonandadrioninsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#7</div>
+    <div class="pct" style="color:#4b5563">19%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://janusagents.com">Janus Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">janusagents.com</span></div>
     <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 24 from rule weights -12 model adjustment (cap ±15)</div>
-    <div class="reason">The only evidence is the absence of a chat widget and a contact page with just an email, which for an established self-serve SaaS is a deliberate support design rather than an automation pain, so there is no substantive signal pointing at any offer.</div>
+    <div class="math">score = 24 from rule weights -5 model adjustment (cap ±15)</div>
+    <div class="reason">The only two signals are generic web-form boilerplate — no chat widget and a &quot;we&#x27;ll get back to you&quot; contact page — which for a 12-person local agency that deliberately routes clients to phone and text is not evidence of a support or data pain, so no offer is identifiable from this evidence.</div>
+    <div class="contact">From your list: team of 12</div>
+    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 3 page(s) checked (about, contact, homepage) <span class="w">+12</span> <a href="https://janusagents.com">source</a></li><li><span class="src">site</span>contact page says &quot;we&#x27;ll get back to you&quot; <span class="w">+12</span> <a href="https://janusagents.com/contact">source</a></li></ul>
     
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 5 page(s) checked (about, careers, contact, homepage, services) <span class="w">+12</span> <a href="https://basecamp.com">source</a></li><li><span class="src">site</span>contact page offers only an email address; no phone number or live channel found on it <span class="w">+12</span> <a href="https://basecamp.com/contact">source</a></li></ul>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: janusagents, janusinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#8</div>
+    <div class="pct" style="color:#4b5563">16%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://burkhartinsurance.com">Burkhart Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">burkhartinsurance.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 24 from rule weights -8 model adjustment (cap ±15)</div>
+    <div class="reason">The only two signals are a missing chat widget and a generic &quot;contact us for a quote&quot; line on a 21-person local insurance agency&#x27;s site, which are boilerplate for small brokerages rather than evidence of a specific automation pain, so no offer is supported.</div>
+    <div class="contact">From your list: team of 21</div>
+    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 3 page(s) checked (about, contact, homepage) <span class="w">+12</span> <a href="https://burkhartinsurance.com">source</a></li><li><span class="src">site</span>contact page says &quot;Contact Burkhart Insurance for a Quote&quot; <span class="w">+12</span> <a href="https://burkhartinsurance.com/contact-us">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>ok</span></div>
-    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>competitive: no chat widget on asana.com either; no gap</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: burkhartinsurance, burkhartinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#9</div>
+    <div class="pct" style="color:#4b5563">16%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://trimbleins.com">Trimble Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">trimbleins.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 24 from rule weights -8 model adjustment (cap ±15)</div>
+    <div class="reason">The only evidence is two absence-of-feature findings (no chat widget, no client portal) on a small family-owned insurance agency&#x27;s marketing site, which say nothing about internal manual workload and are normal for a 20-person agency, so no offer is actually supported.</div>
+    <div class="contact">From your list: team of 20</div>
+    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 2 page(s) checked (homepage, services) <span class="w">+12</span> <a href="https://trimbleins.com">source</a></li><li><span class="src">site</span>no client login or self-serve portal found across 2 page(s) checked <span class="w">+12</span> <a href="https://trimbleins.com">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: trimbleins, trimbleinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+  </div>
+</div>
+<div class="card">
+  <div class="scorebox">
+    <div class="rank">#10</div>
+    <div class="pct" style="color:#4b5563">11%</div>
+    <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
+  </div>
+  <div class="body">
+    <div class="name"><a href="https://shineinsurance.com">Shine Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">shineinsurance.com</span></div>
+    <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
+    <div class="math">score = 17 from rule weights -6 model adjustment (cap ±15)</div>
+    <div class="reason">The only signals are a missing chat widget and a generic &quot;Join Our Team&quot; link on an 11-person local insurance agency&#x27;s site, neither of which evidences ticket volume, data work, or a repetitive back-office process, so no offer is supported and the formally-present capability gap is likely irrelevant.</div>
+    <div class="contact">From your list: team of 11</div>
+    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 4 page(s) checked (about, contact, homepage, services) <span class="w">+12</span> <a href="https://shineinsurance.com">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://shineinsurance.com">source</a></li></ul>
+    
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: shineinsurance, shineinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
   </div>
 </div>
 <div class="card">
@@ -251,35 +251,35 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://infobip.com">Infobip</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">infobip.com</span></div>
+    <div class="name"><a href="https://mmains.net">MMA Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">mmains.net</span></div>
     <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 24 from rule weights -15 model adjustment (cap ±15)</div>
-    <div class="reason">The only signals are missing live-chat/phone contact channels, which are meaningless for a company whose own product line is chatbots, AI agents and cloud contact center — it would build any such automation in-house, so there is no identifiable pain here.</div>
+    <div class="math">score = 17 from rule weights -8 model adjustment (cap ±15)</div>
+    <div class="reason">The only signals are the absence of a chat widget and a generic &quot;Join Our Team&quot; link on the site of a 13-person Ohio insurance agency — neither indicates any specific manual-process, data or ticket-volume pain, so there is no basis for naming an offer.</div>
+    <div class="contact">From your list: team of 13</div>
+    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 4 page(s) checked (about, contact, homepage, services) <span class="w">+12</span> <a href="https://mmains.net">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://mmains.net">source</a></li></ul>
     
-    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 5 page(s) checked (about, careers, contact, homepage, services) <span class="w">+12</span> <a href="https://infobip.com">source</a></li><li><span class="src">site</span>contact page offers only a contact form; no phone number or live channel found on it <span class="w">+12</span> <a href="https://infobip.com/contact">source</a></li></ul>
-    
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>ok</span></div>
-    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>competitive: no chat widget on twilio.com either; no gap</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: mmains, mmainsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
   </div>
 </div>
 <div class="card">
   <div class="scorebox">
     <div class="rank">#12</div>
-    <div class="pct" style="color:#4b5563">0%</div>
+    <div class="pct" style="color:#4b5563">2%</div>
     <span class="band" style="color:#4b5563;background:#e5e7eb">FAIL</span>
   </div>
   <div class="body">
-    <div class="name"><a href="https://doordash.com">DoorDash</a>
-      <span style="color:#9ca3af;font-weight:400;font-size:12px">doordash.com</span></div>
+    <div class="name"><a href="https://allenharmon.com">Allen-Harmon-Mason-Selinger Insurance Agency</a>
+      <span style="color:#9ca3af;font-weight:400;font-size:12px">allenharmon.com</span></div>
     <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
-    <div class="math">score = 0 from rule weights +0 model adjustment (cap ±15)</div>
-    <div class="reason">No concrete signal found, and coverage was partial (reviews robots-disallowed, site blocked).</div>
+    <div class="math">score = 12 from rule weights -10 model adjustment (cap ±15)</div>
+    <div class="reason">The only evidence is scraped CSS boilerplate and a single absence-of-chat-widget signal on a small 14-person insurance agency site, which says nothing about any actual manual process or data pain, so no offer can be named.</div>
+    <div class="contact">From your list: team of 14</div>
+    <ul class="evidence"><li><span class="src">site</span>no live chat or support widget detected in the HTML of 1 page(s) checked (homepage) <span class="w">+12</span> <a href="https://allenharmon.com">source</a></li></ul>
     
-    <ul class="evidence"><li>No signals gathered.</li></ul>
-    
-    <div class="meta">Coverage: site <span class="bad">blocked</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">site: 403 Forbidden from doordash.com. Noted; no evasion attempted.<br>hiring: no public Greenhouse/Lever board found (tokens tried: doordash)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: allenharmon, allenharmonmasonselingerinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
   </div>
 </div>
 </div></body></html>

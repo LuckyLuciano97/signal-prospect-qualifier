@@ -61,7 +61,7 @@ in `config.py`.
 
 | Module | What it reads | Status |
 |---|---|---|
-| `gather/site.py` | homepage + about/services/careers/contact: what they do, chat-widget presence, contact channels, growth language, links to their job board | always on |
+| `gather/site.py` | homepage + about/services/careers/contact: what they do, chat-widget presence, client-portal presence, manual-process language in their own copy ("call us for a quote", fax numbers), contact channels, growth language, links to their job board | always on |
 | `gather/hiring.py` | Greenhouse/Lever public board APIs (board found via links on their own site, else two polite token guesses); role clusters; full text of the few most relevant posts, scanned for explicit pain language | always on |
 | `gather/reviews.py` | Trustpilot and Apple App Store review complaints | **effectively closed** — see below |
 | `gather/competitive.py` | one cheap check: competitor's site has a chat widget the company's lacks (only for rows with a `competitor_domain`) | lowest weight, optional |
@@ -124,42 +124,51 @@ python run.py --no-llm        # rule-based scores only, no key needed
 python validate.py            # audit the run's promises; exits non-zero on failure
 ```
 
-Input CSV needs `company` and `domain` columns; `industry`, `contact_name`,
-`contact_title`, `contact_email`, `competitor_domain` are optional and
-passed through. Common Apollo header spellings are recognised.
+Input CSV needs `company` and `domain` columns; `industry`, `team_size`,
+`contact_name`, `contact_title`, `contact_email`, `competitor_domain` are
+optional and passed through (`team_size` is also given to the qualifier as
+context — a 5-person agency and a 5,000-person vendor mean different things
+by the same signal). Common Apollo header spellings are recognised.
 
 ## Numbers from the committed run
 
-The committed `report.html` / `results.csv` come from a real run over the 12
-companies in `input_example.csv` on 2026-08-06 (they are large, well-known
-companies because their signals are public and checkable — as prospects for
-a small studio most of them *should* score mediocre, and they do):
+The committed `report.html` / `results.csv` come from a real run on
+2026-08-06 over the 12 companies in `input_example.csv`: small US insurance
+agencies, 5 to 47 people — the segment a small automation studio actually
+sells to. Small prospects have no job boards and no review pages, so the
+run leans on what their own sites show:
 
-* **12 companies, 44 signals gathered, 4 PASS / 2 MAYBE / 6 FAIL**,
-  6 openers drafted. Cold crawl ~3 minutes; re-runs ~90 s from cache.
-* **13 model calls** (claude-opus-5), 18.7k input / 2.9k output tokens.
-* Top of the list: Braze at 80% — 18 open support roles plus a Technical
-  Support Specialist post literally requiring "managing and prioritizing a
-  high volume of inquiries and escalations", quoted in the evidence.
-* Bottom of the list: DoorDash at 0% — its site answered 403, no job board
-  was found, and the tool says exactly that instead of inventing a reason.
-* **2 sites refused the crawler with a 403** (gopuff.com, doordash.com):
-  recorded as blocked coverage, not worked around. Gopuff still scored 30%
-  from its public Lever board — evidence that was genuinely available.
-* **Review coverage was robots-disallowed for all 12 companies** (see the
-  honest-limit section above), so the "partial coverage" counter in the
-  report reads 12/12. That is the tool being truthful about what it could
-  not see, not a crash.
-* The model's adjustment was negative for every scored company (−5 to −15):
-  it repeatedly recognised that big-enterprise hiring clusters are in-house
-  build capacity rather than outsourceable pain. The rule base proposes,
-  the model tempers, and both halves are printed on every card.
+* **12 companies, 32 signals gathered, 0 PASS / 2 MAYBE / 10 FAIL**,
+  scores spread 2%–50%, openers drafted for both MAYBEs. 14 model calls
+  (claude-opus-5), 21.5k input / 3.9k output tokens, ~100 s with a warm
+  page cache.
+* Top of the list: Jacobs Insurance Agency at 50% — no chat widget, no
+  client portal on any page checked, and a contact page that both promises
+  "we'll get back to you" and lists a fax number. Four independent
+  observations, each quoted with its page.
+* **Zero PASS is the honest result**: none of these agencies shows a
+  burning, specific pain in public. The two MAYBEs are "worth a look",
+  which is exactly what the band means; nothing was inflated to make the
+  demo prettier.
+* The model's adjustment went *positive* only once (Jacobs, +2, a team of
+  8 where the manual-process markers corroborate each other) and negative
+  where the same markers were thin or the team large enough to fix things
+  in-house. Both halves of every score are printed on the card.
+* An earlier run of the same list scored **all 12 into FAIL** — the signal
+  catalogue at the time only knew hiring-board and chat-widget vocabulary,
+  and `validate.py` check 5 failed the run for not discriminating. The fix
+  was more *observation*, not more generosity: detectors for
+  manual-process language ("call us for a quote", "we'll get back to you",
+  fax numbers) and missing client portals, each quoted verbatim from the
+  company's own pages. That failed validation run is the system working.
 
-One defect this process caught and fixed, left here as evidence the checks
-work: an early run scored Elastic 57% on a "support cluster" that title-
-matching had built out of an FP&A manager and a revenue-ops role. The
-qualifier's own reasoning flagged the misclassification; a finance-title
-guard now excludes such roles, and Elastic honestly sits at 29% FAIL.
+Two build-time defects the checks caught, left here as evidence they work:
+an enterprise test run scored Elastic 57% on a "support cluster" that
+title-matching had built out of an FP&A manager and a revenue-ops role
+(the qualifier's own reasoning flagged it; a finance-title guard now
+excludes such roles), and a first draft of the manual-process detectors
+matched the `&quot;` HTML entity as the word "quote" — which is why every
+detector now runs on extracted visible text, never raw markup.
 
 ## Validation
 

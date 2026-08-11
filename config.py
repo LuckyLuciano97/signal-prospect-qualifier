@@ -66,10 +66,10 @@ MAX_REVIEWS_SCANNED = 20
 # --------------------------------------------------------------------------
 
 # Weight per signal type. A type found more than once still counts once —
-# the *_cluster types already encode "more than one of these" — except
-# capability_gap, which may stack up to CAPABILITY_GAP_STACK_CAP because two
-# independent gaps (no chat widget AND form-only contact) genuinely say more
-# than one.
+# the *_cluster types already encode "more than one of these" — except the
+# types in STACK_CAPS, where independent instances genuinely say more than
+# one: no chat widget AND no client portal are two separate gaps, a fax
+# number AND "call us for a quote" are two separate manual-process markers.
 SIGNAL_WEIGHTS = {
     "job_post_pain": 30,        # job text literally names the pain ("manual", "backlog")
     "support_role_cluster": 30, # >= 2 open support/CS roles
@@ -77,12 +77,17 @@ SIGNAL_WEIGHTS = {
     "review_complaints": 30,    # recurring relevant complaint pattern in public reviews
     "single_relevant_role": 15, # exactly 1 open support or data/ops role
     "broad_hiring": 12,         # scaling fast across functions (processes break)
-    "capability_gap": 12,       # a visible gap on their own site (no chat, form-only)
+    "capability_gap": 12,       # a visible gap on their own site (no chat, no portal)
+    "manual_process_language": 12,  # their own copy describes a manual process
     "growth_language": 5,       # "we're hiring" / expansion copy; generic on its own
     "competitor_gap": 8,        # competitor visibly has a capability they lack
 }
 
-CAPABILITY_GAP_STACK_CAP = 24   # at most two capability gaps count
+# How far same-type signals may stack before further instances count 0.
+STACK_CAPS = {
+    "capability_gap": 36,           # up to three independent gaps
+    "manual_process_language": 24,  # up to two independent markers
+}
 BASE_SCORE_CAP = 85             # rules alone cannot promise a 100
 
 # The model reads the gathered evidence and may adjust the base by at most

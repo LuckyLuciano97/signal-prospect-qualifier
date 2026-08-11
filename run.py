@@ -44,6 +44,8 @@ HEADER_ALIASES = {
     "domain": "domain", "website domain": "domain", "website": "domain",
     "url": "domain", "site": "domain",
     "industry": "industry",
+    "team size": "team_size", "team_size": "team_size", "employees": "team_size",
+    "headcount": "team_size", "# employees": "team_size",
     "contact name": "contact_name", "contact_name": "contact_name",
     "first name": "contact_name",
     "contact title": "contact_title", "contact_title": "contact_title",

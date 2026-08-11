@@ -102,10 +102,11 @@ def _card(rank: int, r: CompanyResult) -> str:
                        f'{html.escape(r.opener)}</div>')
 
     contact_html = ""
-    if r.contact_name or r.contact_email:
-        bits = " · ".join(html.escape(b) for b in
-                          (r.contact_name, r.contact_title, r.contact_email) if b)
-        contact_html = f'<div class="contact">Contact (from your list): {bits}</div>'
+    supplied = [b for b in (r.contact_name, r.contact_title, r.contact_email,
+                            f"team of {r.team_size}" if r.team_size else "") if b]
+    if supplied:
+        bits = " · ".join(html.escape(b) for b in supplied)
+        contact_html = f'<div class="contact">From your list: {bits}</div>'
 
     coverage_bits = []
     for module, status in r.coverage.items():
@@ -174,7 +175,7 @@ def write_report(results: list[CompanyResult], meta: dict) -> None:
 
 
 CSV_COLUMNS = [
-    "rank", "company", "domain", "industry", "score_pct", "band", "offer",
+    "rank", "company", "domain", "industry", "team_size", "score_pct", "band", "offer",
     "base_score", "llm_adjustment", "evidence_count", "evidence", "opener",
     "reasoning", "coverage", "notes",
     "contact_name", "contact_title", "contact_email", "website",
@@ -192,6 +193,7 @@ def write_csv(results: list[CompanyResult]) -> None:
                 "company": r.company,
                 "domain": r.domain,
                 "industry": r.industry,
+                "team_size": r.team_size,
                 "score_pct": r.score,
                 "band": r.band,
                 "offer": r.offer,

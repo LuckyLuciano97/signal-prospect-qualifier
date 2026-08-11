@@ -58,6 +58,11 @@ CLAIM_FAMILIES = {
         re.compile(r"\b(live chat|chat widget|no chat|support widget)\b", re.I),
         {"capability_gap", "competitor_gap"},
     ),
+    "manual process": (
+        re.compile(r"\b(fax|for a quote|get back to you|portal|client login"
+                   r"|self[- ]serve|by hand|manual)\b", re.I),
+        {"manual_process_language", "capability_gap", "job_post_pain"},
+    ),
 }
 
 FAILED_STATES = ("blocked", "unreachable", "robots-disallowed")
@@ -92,13 +97,14 @@ def is_generic_company_email(email: str, domain: str) -> bool:
 
 def recomputed_base(result: CompanyResult) -> int:
     counted: set[str] = set()
-    gap_total = 0
+    stacked: dict[str, int] = {}
     base = 0
     for signal in result.signals:
         weight = config.SIGNAL_WEIGHTS.get(signal.type, 0)
-        if signal.type == "capability_gap":
-            weight = min(weight, max(0, config.CAPABILITY_GAP_STACK_CAP - gap_total))
-            gap_total += weight
+        if signal.type in config.STACK_CAPS:
+            weight = min(weight, max(0, config.STACK_CAPS[signal.type]
+                                     - stacked.get(signal.type, 0)))
+            stacked[signal.type] = stacked.get(signal.type, 0) + weight
         elif signal.type in counted:
             weight = 0
         counted.add(signal.type)
