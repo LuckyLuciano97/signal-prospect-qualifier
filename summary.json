@@ -1,6 +1,6 @@
 {
-  "finished_at": "2026-08-11 13:32 UTC",
-  "input": "input_all.csv",
+  "finished_at": "2026-08-11 16:58 UTC",
+  "input": "input_example.csv",
   "companies": 29,
   "bands": {
     "PASS": 0,
@@ -11,7 +11,7 @@
   },
   "signals_total": 48,
   "openers_drafted": 2,
-  "partial_coverage_companies": 24,
+  "partial_coverage_companies": 2,
   "modules": {
     "entity": true,
     "site": true,
@@ -20,12 +20,12 @@
     "competitive": true
   },
   "http": {
-    "network": 6,
+    "network": 51,
     "cache": 304,
     "retries": 12,
     "failures": 9,
     "robots_disallowed": 48,
-    "blocked_403": 1
+    "blocked_403": 0
   },
   "llm": {
     "model": "claude-opus-5",
@@ -34,5 +34,5 @@
     "input_tokens": 0,
     "output_tokens": 0
   },
-  "elapsed_seconds": 42.9
+  "elapsed_seconds": 76.1
 }

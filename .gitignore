@@ -13,3 +13,6 @@ input_*.csv
 
 __pycache__/
 *.pyc
+
+# Crawl bundles from n8n or tools/bundle_from_cache.py (rebuildable, can be large)
+bundles/

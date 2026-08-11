@@ -33,6 +33,7 @@ from gather import competitive, entity, hiring, reviews, site
 from llm import AnthropicEngine, LLMError
 from model import CompanyResult
 from net import PoliteClient, setup_logging
+from sources import crawl_bundle
 
 log = logging.getLogger("signal.run")
 
@@ -93,13 +94,21 @@ def read_input(path: Path) -> list[CompanyResult]:
 
 
 def process(client: PoliteClient, engine: AnthropicEngine | None,
-            result: CompanyResult, modules: dict[str, bool]) -> None:
+            result: CompanyResult, modules: dict[str, bool],
+            bundle: dict | None = None) -> None:
     facts: dict = {"careers_url": None, "board_hints": [], "chat_widget": None,
                    "homepage_text": ""}
     if modules["site"]:
         facts = site.gather(client, result)
     else:
         result.coverage["site"] = "skipped"
+
+    # The crawler's own account of what it reached replaces what the site
+    # module inferred, and it has to land here: the entity gate and the
+    # scorer both read coverage, so correcting it afterwards would leave a
+    # verdict standing on a fact that had since changed.
+    if bundle is not None:
+        crawl_bundle.apply_coverage(bundle, result)
 
     # The entity gate runs before anything else is gathered or scored: if this
     # is a trade association or a publisher, the rest of the pipeline is wasted
@@ -153,6 +162,9 @@ def process(client: PoliteClient, engine: AnthropicEngine | None,
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description="Qualify a list of companies by public signals.")
     ap.add_argument("--input", type=Path, default=config.INPUT_PATH)
+    ap.add_argument("--bundles", type=Path, default=None,
+                    help="score pre-crawled bundles from this directory instead "
+                         "of fetching (see sources/crawl_bundle.py)")
     ap.add_argument("--limit", type=int, default=0, help="process at most N companies")
     ap.add_argument("--no-llm", action="store_true",
                     help="rule-based scores only; skips openers")
@@ -179,7 +191,26 @@ def main(argv: list[str] | None = None) -> int:
     if args.no_entity:
         modules["entity"] = False
 
-    results = read_input(args.input)
+    bundles: dict[str, dict] = {}
+    if args.bundles:
+        if not args.bundles.is_dir():
+            log.error("--bundles %s is not a directory", args.bundles)
+            return 1
+        for path, bundle in crawl_bundle.iter_bundles(args.bundles):
+            bundles[bundle["domain"].lower().removeprefix("www.")] = bundle
+        if not bundles:
+            log.error("no bundles found in %s", args.bundles)
+            return 1
+        log.info("bundle mode: %d pre-crawled bundle(s) from %s; no fetching",
+                 len(bundles), args.bundles)
+        results = [CompanyResult(company=b["company"], domain=b["domain"],
+                                 industry=str(b.get("industry", "")),
+                                 team_size=str(b.get("team_size", "") or ""),
+                                 location=str(b.get("location", "")))
+                   for b in bundles.values()]
+        results.sort(key=lambda r: r.company.lower())
+    else:
+        results = read_input(args.input)
     if args.limit:
         results = results[: args.limit]
     if not results:
@@ -200,8 +231,12 @@ def main(argv: list[str] | None = None) -> int:
 
     for i, result in enumerate(results, 1):
         log.info("[%d/%d] %s (%s)", i, len(results), result.company, result.domain)
+        bundle = bundles.get(result.domain.lower().removeprefix("www."))
+        # In bundle mode each company is served by its own offline client, so
+        # a page missing from one bundle can never be answered from another.
+        per_company_client = crawl_bundle.BundleClient(bundle) if bundle else client
         try:
-            process(client, engine, result, modules)
+            process(per_company_client, engine, result, modules, bundle)
         except Exception:
             # A crash on one company must not cost the run; but it is loud,
             # scored 0, and marked as an error rather than "no signal".

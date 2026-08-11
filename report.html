@@ -48,11 +48,11 @@ h1 { font-size: 20px; margin-bottom: 2px; }
 </style></head>
 <body><div class="wrap">
 <h1>Signal — prospect qualification run</h1>
-<div class="sub">input_all.csv · 2026-08-11 13:32 UTC
+<div class="sub">input_example.csv · 2026-08-11 16:58 UTC
  · model: claude-opus-5
  · every score is the sum of the weighted signals listed under it; companies with no
  gathered evidence are 0% by construction, not judgement.</div>
-<div class="strip"><div class="stat"><b>29</b><span>companies</span></div><div class="stat"><b>0</b><span>pass</span></div><div class="stat"><b>2</b><span>maybe</span></div><div class="stat"><b>22</b><span>fail</span></div><div class="stat coverage-warn"><b>3</b><span>not a prospect</span></div><div class="stat coverage-warn"><b>2</b><span>needs review</span></div><div class="stat"><b>48</b><span>signals found</span></div><div class="stat coverage-warn"><b>24</b><span>partial coverage</span></div></div>
+<div class="strip"><div class="stat"><b>29</b><span>companies</span></div><div class="stat"><b>0</b><span>pass</span></div><div class="stat"><b>2</b><span>maybe</span></div><div class="stat"><b>22</b><span>fail</span></div><div class="stat coverage-warn"><b>3</b><span>not a prospect</span></div><div class="stat coverage-warn"><b>2</b><span>needs review</span></div><div class="stat"><b>48</b><span>signals found</span></div><div class="stat coverage-warn"><b>2</b><span>partial coverage</span></div></div>
 
 <div class="card">
   <div class="scorebox">
@@ -69,8 +69,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 21</div>
     <ul class="evidence"><li><span class="src">site</span>contact page routes service requests to a person - &quot;...We’d love to learn how we can help you. Phone: (800) 737-3600 Email for Certificates For assistance with insurance certifica...&quot; <span class="w">+26</span> <a href="https://burkhartinsurance.com/contact-us">source</a></li><li><span class="src">site</span>site invites quotes but no online quote form or link was found on any of the 3 page(s) checked (about, contact, homepage) <span class="w">+24</span> <a href="https://burkhartinsurance.com">source</a></li><li><span class="src">site</span>contact page says &quot;Contact Burkhart Insurance for a Quote&quot; <span class="w">+12</span> <a href="https://burkhartinsurance.com/contact-us">source</a></li></ul>
     <div class="opener"><span class="label">Draft opener (grounded in s1, s2, s3)</span>Your contact page asks people to reach out for a quote, but across your homepage, about, and contact pages I could not find an online quote form, so those requests seem to land with a person by phone or email. Certificate requests appear to route the same way.</div>
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: burkhartinsurance, burkhartinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: burkhartinsurance, burkhartinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Burkhart Insurance Agency&#x27; rated 4.8 from 26 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -88,8 +88,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 10</div>
     <ul class="evidence"><li><span class="src">site</span>homepage page routes service requests to a person - &quot;...o ID Card Request a Certificate Request Policy Change Policy Review Web Accessibility Contact Contact Us 100 E. Bridge Street Portland, MI 48875...&quot; <span class="w">+26</span> <a href="https://simon-insurance.com">source</a></li><li><span class="src">site</span>homepage page still lists a fax number <span class="w">+6</span> <a href="https://simon-insurance.com">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://simon-insurance.com">source</a></li></ul>
     <div class="opener"><span class="label">Draft opener (grounded in s1, s2, s3)</span>Your site has ID card requests, certificate requests, policy changes and policy reviews all coming in to a person at the Bridge Street office, with a fax number still listed alongside them. That is a lot of small inbound asks landing on whoever is at the desk that day, and I noticed you also have a Join Our Team page up.</div>
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: simon-insurance, simoninsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: simon-insurance, simoninsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Simon Insurance Agency&#x27; rated 4.9 from 43 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -107,8 +107,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 11</div>
     <ul class="evidence"><li><span class="src">site</span>homepage page routes service requests to a person - &quot;...y a Bill Request Auto ID Card Request a Certificate Request Policy Change Web Accessibility Contact Us 1605 S Walnut Street Bloomington, IN 47...&quot; <span class="w">+26</span> <a href="https://shineinsurance.com">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://shineinsurance.com">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: shineinsurance, shineinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: shineinsurance, shineinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Shine Insurance Agency LLC&#x27; rated 4.9 from 126 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -126,8 +126,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 41</div>
     <ul class="evidence"><li><span class="src">site</span>no client login, portal or online bill-pay found across 3 page(s) checked <span class="w">+12</span> <a href="https://minorinsurance.com">source</a></li><li><span class="src">site</span>about page says &quot;Contact Minor Insurance for a free quote&quot; <span class="w">+12</span> <a href="https://minorinsurance.com/about/">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://minorinsurance.com">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: minorinsurance, minorinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: minorinsurance, minorinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Minor Insurance&#x27; rated 3.8 from 22 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -145,8 +145,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 19</div>
     <ul class="evidence"><li><span class="src">site</span>no client login, portal or online bill-pay found across 2 page(s) checked <span class="w">+12</span> <a href="https://agentschoice.com">source</a></li><li><span class="src">site</span>about page still lists a fax number <span class="w">+6</span> <a href="https://agentschoice.com/about.html">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: agentschoice, agentschoiceinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: agentschoice, agentschoiceinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped</div>
   </div>
 </div>
 <div class="card">
@@ -164,8 +164,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 12</div>
     <ul class="evidence"><li><span class="src">site</span>homepage page says &quot;we&#x27;ll reach out&quot; <span class="w">+12</span> <a href="https://nevermaninsurance.com">source</a></li><li><span class="src">site</span>homepage page still lists a fax number <span class="w">+6</span> <a href="https://nevermaninsurance.com">source</a></li><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://nevermaninsurance.com">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Neverman Insurance Agency&#x27; rated 5.0 from 150 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -183,8 +183,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 5</div>
     <ul class="evidence"><li><span class="src">site</span>no client login, portal or online bill-pay found across 4 page(s) checked <span class="w">+12</span> <a href="https://avanti-ins.com">source</a></li><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://avanti-ins.com/contact-us/">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: avanti-ins, avantiinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: avanti-ins, avantiinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Avanti Travel Insurance&#x27; rated 4.6 from 3742 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -202,8 +202,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 5</div>
     <ul class="evidence"><li><span class="src">site</span>homepage page says &quot;we will be in touch&quot; <span class="w">+12</span> <a href="https://beck-insurance.com">source</a></li><li><span class="src">site</span>about page still lists a fax number <span class="w">+6</span> <a href="https://beck-insurance.com/about-us/">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: beck-insurance, beckinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: beck-insurance, beckinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Beck Insurance Agency Inc.&#x27; rated 4.7 from 15 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -221,8 +221,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 20</div>
     <ul class="evidence"><li><span class="src">site</span>contact page says &quot;we will be in touch&quot; <span class="w">+12</span> <a href="https://www.insurewithbb.com/contact/">source</a></li><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://www.insurewithbb.com/contact/">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: brownandbrowninsuranceagency, insurewithbb)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: brownandbrowninsuranceagency, insurewithbb)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Brown &amp; Brown Insurance of Arizona&#x27; rated 4.3 from 29 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -240,8 +240,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 8</div>
     <ul class="evidence"><li><span class="src">site</span>contact page says &quot;we&#x27;ll get back to you&quot; <span class="w">+12</span> <a href="https://jacobsinsurance.com/contact/owosso">source</a></li><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://jacobsinsurance.com/contact/owosso">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: jacobsinsurance, jacobsinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: jacobsinsurance, jacobsinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Jacobs Insurance Agency&#x27; rated 4.9 from 35 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -259,8 +259,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 47</div>
     <ul class="evidence"><li><span class="src">site</span>contact page says &quot;Contact Mitchell Insurance Agency for a Quote&quot; <span class="w">+12</span> <a href="https://www.insurance-mitchell.com/locations/">source</a></li><li><span class="src">site</span>homepage page still lists a fax number <span class="w">+6</span> <a href="https://insurance-mitchell.com">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: insurance-mitchell, mitchellinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: insurance-mitchell, mitchellinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Mitchell Insurance Agency&#x27; rated 4.9 from 193 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -278,8 +278,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 21</div>
     <ul class="evidence"><li><span class="src">site</span>careers page says &quot;we will be in touch&quot; <span class="w">+12</span> <a href="https://pciaonline.com/careers">source</a></li><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://pciaonline.com/contact">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Professional Concepts Insurance Agency - PCIA&#x27; rated 5.0 from 55 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -297,8 +297,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 17</div>
     <ul class="evidence"><li><span class="src">site</span>homepage page says &quot;Contact us for a quote&quot; <span class="w">+12</span> <a href="https://moonadrion.com">source</a></li><li><span class="src">site</span>homepage page says &quot;join Our Team&quot; <span class="w">+5</span> <a href="https://moonadrion.com">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: moonadrion, moonandadrioninsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: moonadrion, moonandadrioninsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Moon &amp; Adrion Insurance Agency, Inc.&#x27; rated 4.9 from 117 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -316,8 +316,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 14</div>
     <ul class="evidence"><li><span class="src">site</span>no client login, portal or online bill-pay found across 5 page(s) checked <span class="w">+12</span> <a href="https://fsahealth.org">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;FSA Insurance Agency&#x27; rated 4.9 from 632 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -335,8 +335,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 20</div>
     <ul class="evidence"><li><span class="src">site</span>no client login, portal or online bill-pay found across 2 page(s) checked <span class="w">+12</span> <a href="https://trimbleins.com">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: trimbleins, trimbleinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: trimbleins, trimbleinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Trimble Insurance Agency, Inc.&#x27; rated 4.8 from 86 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -354,8 +354,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 27</div>
     <ul class="evidence"><li><span class="src">site</span>homepage page still lists a fax number <span class="w">+6</span> <a href="https://hamiltonins.net">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Hamilton&#x27; rated 4.8 from 5 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -373,8 +373,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 49</div>
     <ul class="evidence"><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://fordinsurance.net/contact-us">source</a></li><li><span class="src">site</span>careers page says &quot;open positions&quot; <span class="w">+5</span> <a href="https://fordinsurance.net/careers">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Ford Insurance Agency&#x27; rated 4.8 from 42 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -392,8 +392,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 47</div>
     <ul class="evidence"><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://michigancommunity.com/other/contact_us.aspx">source</a></li><li><span class="src">site</span>careers page says &quot;join our team&quot; <span class="w">+5</span> <a href="https://michigancommunity.com/other/careers_with_michigan_community_insurance_agency.aspx">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Michigan Community Insurance Agency&#x27; rated 4.8 from 240 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -411,8 +411,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 12</div>
     <ul class="evidence"><li><span class="src">site</span>contact page says &quot;we&#x27;ll get back to you&quot; <span class="w">+12</span> <a href="https://janusagents.com/contact">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: janusagents, janusinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: janusagents, janusinsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Janus Insurance Agency, Inc&#x27; rated 4.9 from 207 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -430,8 +430,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 19</div>
     <ul class="evidence"><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://www.goodmanvenegas.com/contact-us/">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: careers page present but roles not machine-readable (likely rendered by JavaScript); not guessed at<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Goodman Venegas Insurance Agency&#x27; rated 3.0 from 2 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -449,8 +449,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 46</div>
     <ul class="evidence"><li><span class="src">site</span>contact page still lists a fax number <span class="w">+6</span> <a href="https://phelanins.com/contact/">source</a></li><li><span class="src">site</span>careers page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://phelanins.com/careers/">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>ok</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>ok</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Phelan Insurance Agency, Inc.&#x27; rated 4.9 from 130 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -464,12 +464,12 @@ h1 { font-size: 20px; margin-bottom: 2px; }
       <span style="color:#9ca3af;font-weight:400;font-size:12px">iangrahamagency.com</span></div>
     <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
     <div class="math">score = 0 from rule weights +0 model adjustment (cap ±15)</div>
-    <div class="reason">No concrete signal found, and coverage was partial (reviews robots-disallowed, site unreachable).</div>
+    <div class="reason">No concrete signal found, and coverage was partial (site unreachable).</div>
     <div class="contact">From your list: team of 8</div>
     <ul class="evidence"><li>No signals gathered.</li></ul>
     
-    <div class="meta">Coverage: site <span class="bad">unreachable</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">site: homepage could not be fetched (no signal, not scored)<br>entity: site unreadable, entity type not assessed<br>hiring: no public Greenhouse/Lever board found (tokens tried: iangrahamagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span class="bad">unreachable</span> · hiring <span>none-found</span> · reviews <span>none-found</span> · competitive <span>skipped</span></div>
+    <div class="notes">site: homepage could not be fetched (no signal, not scored)<br>entity: site unreadable, entity type not assessed<br>hiring: no public Greenhouse/Lever board found (tokens tried: iangrahamagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: no Google place confidently matching &#x27;Ian Graham Agency&#x27;; skipped</div>
   </div>
 </div>
 <div class="card">
@@ -483,12 +483,12 @@ h1 { font-size: 20px; margin-bottom: 2px; }
       <span style="color:#9ca3af;font-weight:400;font-size:12px">lloydottoagencies.com</span></div>
     <div class="offer">Fits: <b>unclear</b> — signals are mixed or too thin to name one offer</div>
     <div class="math">score = 0 from rule weights +0 model adjustment (cap ±15)</div>
-    <div class="reason">No concrete signal found, and coverage was partial (reviews robots-disallowed, site unreachable).</div>
+    <div class="reason">No concrete signal found, and coverage was partial (site unreachable).</div>
     <div class="contact">From your list: team of 15</div>
     <ul class="evidence"><li>No signals gathered.</li></ul>
     
-    <div class="meta">Coverage: site <span class="bad">unreachable</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">site: homepage could not be fetched (no signal, not scored)<br>entity: site unreadable, entity type not assessed<br>hiring: no public Greenhouse/Lever board found (tokens tried: lloydottoagencies)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span class="bad">unreachable</span> · hiring <span>none-found</span> · reviews <span>ok</span> · competitive <span>skipped</span></div>
+    <div class="notes">site: homepage could not be fetched (no signal, not scored)<br>entity: site unreadable, entity type not assessed<br>hiring: no public Greenhouse/Lever board found (tokens tried: lloydottoagencies)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google shows &#x27;Lloyd Agencies&#x27; rated 4.9 from 5409 review(s)</div>
   </div>
 </div>
 <div class="card">
@@ -506,8 +506,8 @@ h1 { font-size: 20px; margin-bottom: 2px; }
     <div class="contact">From your list: team of 13</div>
     <ul class="evidence"><li><span class="src">site</span>homepage page says &quot;Join Our Team&quot; <span class="w">+5</span> <a href="https://mmains.net">source</a></li></ul>
     
-    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span class="bad">robots-disallowed</span> · competitive <span>skipped</span></div>
-    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: mmains, mmainsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: Google Places answered 403 (enable &#x27;Places API (New)&#x27; for this key&#x27;s project); skipped</div>
+    <div class="meta">Coverage: site <span>ok</span> · hiring <span>none-found</span> · reviews <span>none-found</span> · competitive <span>skipped</span></div>
+    <div class="notes">hiring: no public Greenhouse/Lever board found (tokens tried: mmains, mmainsuranceagency)<br>reviews: Trustpilot robots.txt disallows crawling (User-agent: * is banned site-wide); respected, skipped<br>reviews: App Store robots.txt disallows the feed; skipped<br>reviews: no Google place confidently matching &#x27;MMA Insurance Agency&#x27;; skipped</div>
   </div>
 </div>
 <div class="card">

@@ -1,0 +1,203 @@
+{
+  "name": "Signal - crawl to bundle",
+  "meta": {
+    "description": "Fetches company pages and writes one crawl bundle per company for the Signal scorer. Detection happens in Python, never here. See n8n/README.md; node parameters (sheet id, output path) are placeholders you must set, and node typeVersions may need bumping to match your n8n release."
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "rule": { "interval": [ { "field": "weeks" } ] }
+      },
+      "id": "trigger",
+      "name": "Schedule Trigger",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [ -640, 0 ]
+    },
+    {
+      "parameters": {
+        "documentId": { "__rl": true, "mode": "id", "value": "PUT_YOUR_SHEET_ID_HERE" },
+        "sheetName": { "__rl": true, "mode": "name", "value": "prospects" },
+        "options": {}
+      },
+      "id": "sheet",
+      "name": "Prospect list",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [ -420, 0 ],
+      "notes": "Columns: company, domain, industry, team_size. Credentials come from the credential store, never from a node field."
+    },
+    {
+      "parameters": { "batchSize": 1, "options": {} },
+      "id": "loop",
+      "name": "Loop Over Items",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [ -200, 0 ],
+      "notes": "One company in flight at a time, so one failure never takes the run with it."
+    },
+    {
+      "parameters": {
+        "url": "=https://{{ $json.domain }}/robots.txt",
+        "options": { "response": { "response": { "neverError": true, "responseFormat": "text" } } }
+      },
+      "id": "robots",
+      "name": "Fetch robots.txt",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [ 20, 0 ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const domain = $('Loop Over Items').item.json.domain;\nconst body = typeof $json.data === 'string' ? $json.data : ($json.body || '');\nconst fetched = Boolean(body);\n\nlet allows = true;\nconst disallowed = [];\nif (fetched) {\n  let applies = false;\n  for (const raw of body.split('\\n')) {\n    const line = raw.split('#')[0].trim();\n    if (!line) continue;\n    const [field, ...rest] = line.split(':');\n    const value = rest.join(':').trim();\n    const key = field.trim().toLowerCase();\n    if (key === 'user-agent') {\n      applies = value === '*' || value.toLowerCase().includes('signal');\n    } else if (applies && key === 'disallow') {\n      if (value === '/') allows = false;\n      else if (value) disallowed.push(value);\n    }\n  }\n}\nreturn [{ json: { domain, robots_fetched: fetched, allows_crawl: allows, disallowed_paths: disallowed } }];"
+      },
+      "id": "parserobots",
+      "name": "Parse robots",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [ 240, 0 ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": { "caseSensitive": true, "version": 2 },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.allows_crawl }}",
+              "rightValue": "",
+              "operator": { "type": "boolean", "operation": "true", "singleValue": true }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "id": "ifallowed",
+      "name": "Crawl allowed?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [ 460, 0 ],
+      "notes": "False branch still writes a bundle, with allows_crawl false and no pages, so the report can say 'could not look' rather than the company silently disappearing."
+    },
+    {
+      "parameters": {
+        "url": "=https://{{ $('Loop Over Items').item.json.domain }}",
+        "options": {
+          "redirect": { "redirect": {} },
+          "response": { "response": { "neverError": true, "responseFormat": "text", "fullResponse": true } }
+        }
+      },
+      "id": "homepage",
+      "name": "Fetch homepage",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [ 680, -100 ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "jsCode": "const domain = $('Loop Over Items').item.json.domain;\nconst html = typeof $json.data === 'string' ? $json.data : ($json.body?.data || '');\nconst base = `https://${domain}`;\n\nconst WANTED = {\n  about: /about|company|who-we-are/i,\n  services: /services|products|solutions|coverage/i,\n  careers: /careers|jobs|join-us/i,\n  contact: /contact/i,\n};\n\nconst found = {};\nconst re = /<a[^>]+href=[\"']([^\"']+)[\"'][^>]*>(.*?)<\\/a>/gis;\nlet m;\nwhile ((m = re.exec(html)) !== null) {\n  const href = m[1].trim();\n  if (!href || /^(mailto:|tel:|javascript:|#)/i.test(href)) continue;\n  let url;\n  try { url = new URL(href, base); } catch { continue; }\n  if (url.hostname.replace(/^www\\./, '') !== domain.replace(/^www\\./, '')) continue;\n  const label = m[2].replace(/<[^>]*>/g, ' ');\n  for (const [type, pattern] of Object.entries(WANTED)) {\n    if (found[type]) continue;\n    if (pattern.test(url.pathname) || pattern.test(label)) found[type] = url.toString();\n  }\n}\nreturn Object.entries(found).map(([page_type, url]) => ({ json: { domain, page_type, url } }));"
+      },
+      "id": "findsubpages",
+      "name": "Find subpages",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [ 900, -100 ]
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.url }}",
+        "options": {
+          "response": { "response": { "neverError": true, "responseFormat": "text", "fullResponse": true } }
+        }
+      },
+      "id": "subpages",
+      "name": "Fetch subpages",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [ 1120, -100 ],
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": { "amount": 1 },
+      "id": "wait",
+      "name": "Be polite",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [ 1340, -100 ],
+      "webhookId": "signal-politeness-wait",
+      "notes": "n8n has no per-host throttle. This is the 1s spacing the Python client applies automatically. Do not remove it."
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const row = $('Loop Over Items').item.json;\nconst robots = $('Parse robots').item.json;\n\nconst ATTEMPTED = ['homepage', 'about', 'services', 'careers', 'contact'];\nconst pages = [];\nconst failed = [];\n\nfor (const item of $input.all()) {\n  const j = item.json;\n  const status = j.statusCode ?? j.status ?? (j.error ? 0 : 200);\n  const pageType = j.page_type || 'homepage';\n  const html = typeof j.data === 'string' ? j.data : (j.body?.data || '');\n  if (status === 200 && html) {\n    pages.push({\n      url: j.url || `https://${row.domain}`,\n      page_type: pageType,\n      status: 200,\n      fetched_at: new Date().toISOString(),\n      html,\n      text: html.replace(/<script[\\s\\S]*?<\\/script>/gi, ' ').replace(/<style[\\s\\S]*?<\\/style>/gi, ' ').replace(/<[^>]+>/g, ' ').replace(/\\s+/g, ' ').trim(),\n    });\n  } else {\n    failed.push({ page_type: pageType, reason: status ? `HTTP ${status}` : 'request failed' });\n  }\n}\n\nconst reached = [...new Set(pages.map(p => p.page_type))];\nfor (const type of ATTEMPTED) {\n  if (!reached.includes(type) && !failed.some(f => f.page_type === type)) {\n    failed.push({ page_type: type, reason: 'not reached' });\n  }\n}\n\nreturn [{ json: {\n  company: row.company,\n  domain: row.domain,\n  industry: row.industry || '',\n  team_size: row.team_size || '',\n  crawled_at: new Date().toISOString(),\n  robots: { fetched: robots.robots_fetched, allows_crawl: robots.allows_crawl, disallowed_paths: robots.disallowed_paths || [] },\n  pages,\n  coverage: {\n    attempted: ATTEMPTED,\n    reached,\n    failed,\n    blocked: [{ source: 'reviews', reason: 'not attempted by this workflow' }],\n  },\n} }];"
+      },
+      "id": "bundle",
+      "name": "Assemble bundle",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [ 1560, 0 ],
+      "notes": "Assembles and forwards only. No detection here: evidence quotes are substring-checked against page text in Python, and a detector on this side would leave the validator nothing to check."
+    },
+    {
+      "parameters": { "operation": "toJson", "options": {} },
+      "id": "tofile",
+      "name": "Bundle to file",
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [ 1780, 0 ]
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileName": "=C:/signal/bundles/{{ $('Loop Over Items').item.json.domain }}.json",
+        "options": {}
+      },
+      "id": "write",
+      "name": "Write bundle",
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [ 2000, 0 ],
+      "notes": "Point this at the directory you pass to run.py --bundles. Keep the files: re-scoring a saved corpus takes seconds and re-crawls nothing."
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": { "main": [ [ { "node": "Prospect list", "type": "main", "index": 0 } ] ] },
+    "Prospect list": { "main": [ [ { "node": "Loop Over Items", "type": "main", "index": 0 } ] ] },
+    "Loop Over Items": { "main": [ [], [ { "node": "Fetch robots.txt", "type": "main", "index": 0 } ] ] },
+    "Fetch robots.txt": {
+      "main": [
+        [ { "node": "Parse robots", "type": "main", "index": 0 } ],
+        [ { "node": "Parse robots", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Parse robots": { "main": [ [ { "node": "Crawl allowed?", "type": "main", "index": 0 } ] ] },
+    "Crawl allowed?": {
+      "main": [
+        [ { "node": "Fetch homepage", "type": "main", "index": 0 } ],
+        [ { "node": "Assemble bundle", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Fetch homepage": {
+      "main": [
+        [ { "node": "Find subpages", "type": "main", "index": 0 } ],
+        [ { "node": "Assemble bundle", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Find subpages": { "main": [ [ { "node": "Fetch subpages", "type": "main", "index": 0 } ] ] },
+    "Fetch subpages": {
+      "main": [
+        [ { "node": "Be polite", "type": "main", "index": 0 } ],
+        [ { "node": "Be polite", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Be polite": { "main": [ [ { "node": "Assemble bundle", "type": "main", "index": 0 } ] ] },
+    "Assemble bundle": { "main": [ [ { "node": "Bundle to file", "type": "main", "index": 0 } ] ] },
+    "Bundle to file": { "main": [ [ { "node": "Write bundle", "type": "main", "index": 0 } ] ] },
+    "Write bundle": { "main": [ [ { "node": "Loop Over Items", "type": "main", "index": 0 } ] ] }
+  },
+  "settings": { "executionOrder": "v1" },
+  "pinData": {}
+}
