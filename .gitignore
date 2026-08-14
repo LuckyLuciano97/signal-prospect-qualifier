@@ -17,3 +17,7 @@ __pycache__/
 # Crawl bundles from n8n or tools/bundle_from_cache.py (rebuildable, can be large)
 bundles/
 bundles_n8n/
+
+# Workflow exports carry the Places API key inline - never commit one.
+signal-crawl*.json
+n8n/*local*.json
