@@ -13,12 +13,12 @@ input records: 29 (results.jsonl, written by run.py)
     2 compan(ies) had an unreadable site and no other signals
 
 [5] score distribution is sane and tracks evidence: PASS
-    bands populated: ['FAIL', 'MAYBE']; mean score with >=2 signals: 18 (16 companies), with zero signals: 0 (2 companies)
+    bands populated: ['FAIL', 'MAYBE']; mean score with >=2 signals: 19 (17 companies), with zero signals: 0 (2 companies)
 
 [6] entity gate: non-prospects are disqualified, unscored and quoted: PASS
     3 compan(ies) disqualified: Big I Michigan (association), The Rough Notes Company (publisher), Underwriters Alliance of Indiana (network)
 
 [7] signal diversity: no single signal dominates the evidence: PASS
-    48 evidence line(s) across 6 signal type(s); most common 'fax_number' at 31% (limit 40%)
+    50 evidence line(s) across 7 signal type(s); most common 'fax_number' at 30% (limit 40%)
 
 result: ALL CHECKS PASSED

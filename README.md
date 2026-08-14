@@ -247,22 +247,27 @@ that reached the output.
 sites. That is not a broken matcher: these sites have no public job boards
 and no downloadable intake forms.
 
-**The review signal is now live and still does not fire, which is the more
-interesting result.** Google Places is connected and matched 21 of 29
-companies to their own listing. Their ratings:
+**The review signal fires on roughly one agency in twenty-two.** Google Places
+matched 22 of 29 companies to their own listing:
 
 ```
-5.0  4.9  4.9  4.9  4.9  4.9  4.9  4.9  4.8  4.8  4.8
-4.6  4.5  3.8  3.0 (2 reviews)  ...
+5.0  5.0  4.9  4.9  4.9  4.9  4.9  4.9  4.9  4.8  4.8
+4.8  4.7  4.6  4.5  3.8  3.4 (29 reviews)  3.0 (2 reviews)
 ```
 
-Small local insurance agencies are rated overwhelmingly well. Only one sits
-below the 3.7 complaint threshold, and it has two reviews — noise, not a
-pattern, so the `GOOGLE_MIN_RATINGS` floor correctly withholds it. The
-hypothesis that a neglected agency would show up as an angry review pattern
-simply does not hold for this segment. That is a finding about the market,
-not a gap in the tool, and it is the reason the run reports 0 PASS honestly
-instead of manufacturing one.
+Small local agencies are rated overwhelmingly well, and only one clears the
+complaint bar: 3.4 across 29 reviews. The 3.0 has two reviews, which the
+`GOOGLE_MIN_RATINGS` floor correctly withholds as noise. So the seam is thin
+rather than absent — worth keeping the signal wired, not worth building a
+segment strategy on.
+
+An earlier version of this file said the hypothesis "does not hold for this
+segment" on the strength of zero hits. That claim was wrong, and the way it
+was wrong is the point: the companies whose homepage came back as builder
+JSON were filed `unclear`, routed to REVIEW, and **every downstream module was
+then skipped** — their coverage read `{"site": "ok"}` and nothing else. The
+lowest-rated agency in the corpus never had its Google listing queried at all.
+A silent gap in gathering had been read as a finding about the market.
 
 The signal stays wired because it costs nothing when silent and will fire
 immediately on a segment where service complaints are public — consumer
