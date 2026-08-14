@@ -210,9 +210,19 @@ def gather(client: PoliteClient, result: CompanyResult,
         result.notes.append(f"hiring: {exc}")
         return
     except RuntimeError as exc:
+        # The board APIs are not in a crawl bundle, so this fires on every
+        # bundled company. Returning here threw away the careers page, which
+        # *is* in the bundle - the run reported "hiring unreachable" while
+        # holding the very page that answers the question. Record that the
+        # boards were not reached, then carry on to the page we have.
         result.coverage["hiring"] = "unreachable"
         result.notes.append(f"hiring: board API unreachable ({exc})")
-        return
+        if not careers_url:
+            return
+        jobs = _careers_page_roles(client, careers_url)
+        if jobs is None:
+            return
+        platform, board_source_url = None, careers_url
 
     source = f"{platform} board" if platform else "careers page"
     if jobs is None and careers_url:

@@ -257,7 +257,73 @@ def _match_place(result: CompanyResult, places: list[dict]) -> dict | None:
     return None
 
 
+def _judge_place(result: CompanyResult, candidates: list[dict],
+                 payload: dict | None) -> str:
+    """Match a candidate to this company and decide what it means.
+
+    One rule for both paths. A live run passes ``payload`` from the details
+    endpoint, which carries review text; a crawl bundle passes ``None`` and
+    the matched candidate's own rating and review count are used. Whichever
+    way the data arrived, the matching and the thresholds happen here.
+    """
+    place = _match_place(result, candidates)
+    if place is None:
+        names = ", ".join(
+            f"'{(p.get('displayName') or {}).get('text', '?')}'"
+            for p in candidates[:3]) or "none"
+        result.notes.append(
+            f"reviews: Google returned {len(candidates)} place(s) for "
+            f"'{result.company}' ({names}) but none publish {result.domain}; "
+            f"skipped rather than risk another company's reviews")
+        return "none-found"
+
+    facts = payload if payload is not None else place
+    name = str((place.get("displayName") or {}).get("text") or "place")
+    maps_url = facts.get("googleMapsUri") or place.get("googleMapsUri") or ""
+    rating = facts.get("rating")
+    count = facts.get("userRatingCount") or 0
+    if rating is not None:
+        result.notes.append(f"reviews: Google shows '{name}' rated "
+                            f"{rating:.1f} from {count} review(s)")
+        if rating <= GOOGLE_LOW_RATING and count >= GOOGLE_MIN_RATINGS:
+            add_signal(result, "review_complaints", "Google reviews", maps_url,
+                       f"Google rating is {rating:.1f} out of 5 across {count} "
+                       f"reviews for '{name}'")
+
+    # Review text only exists on the details response, so a bundle scores on
+    # rating alone. That is recorded rather than left to look like a corpus
+    # with no complaint themes in it.
+    texts = [str((r.get("text") or {}).get("text") or "")
+             for r in ((payload or {}).get("reviews") or [])]
+    texts = [t for t in texts if t][:5]
+    if texts:
+        _scan(result, texts, "Google reviews", maps_url,
+              f"Google reviews of '{name}'", min_hits=GOOGLE_MIN_PATTERN_HITS)
+    elif payload is None:
+        result.notes.append(
+            "reviews: bundle carries ratings but not review text, so complaint "
+            "themes were not scanned")
+    return "ok"
+
+
 def _google(client: PoliteClient, result: CompanyResult) -> str:
+    # A crawl bundle may already carry the raw candidate list. None means the
+    # bundle predates Places entirely, which is a different fact from "Google
+    # returned nothing" and is reported as such.
+    bundled = getattr(client, "google_candidates", None)
+    if bundled is not None:
+        error = getattr(client, "google_error", "")
+        if error:
+            result.notes.append(
+                f"reviews: the crawl bundle records a Google Places failure "
+                f"({error}); not scored")
+            return "unreachable"
+        return _judge_place(result, bundled, None)
+    if getattr(client, "bundle", None) is not None:
+        result.notes.append("reviews: this crawl bundle carries no Google "
+                            "Places block; nothing was looked up")
+        return "unreachable"
+
     api_key = os.environ.get("GOOGLE_MAPS_API_KEY")
     if not api_key:
         return "skipped"
@@ -281,14 +347,7 @@ def _google(client: PoliteClient, result: CompanyResult) -> str:
         candidates = resp.json().get("places") or []
         place = _match_place(result, candidates)
         if place is None:
-            names = ", ".join(
-                f"'{(p.get('displayName') or {}).get('text', '?')}'"
-                for p in candidates[:3]) or "none"
-            result.notes.append(
-                f"reviews: Google returned {len(candidates)} place(s) for "
-                f"'{result.company}' ({names}) but none publish {result.domain}; "
-                f"skipped rather than risk another company's reviews")
-            return "none-found"
+            return _judge_place(result, candidates, None)
         details = client.get(
             f"https://places.googleapis.com/v1/places/{place['id']}"
             f"?fields=rating,userRatingCount,reviews,googleMapsUri",
@@ -309,24 +368,7 @@ def _google(client: PoliteClient, result: CompanyResult) -> str:
         result.notes.append(f"reviews: Google Places lookup failed ({exc})")
         return "unreachable"
 
-    name = str((place.get("displayName") or {}).get("text") or "place")
-    maps_url = payload.get("googleMapsUri") or place.get("googleMapsUri") or ""
-    rating = payload.get("rating")
-    count = payload.get("userRatingCount") or 0
-    if rating is not None:
-        result.notes.append(f"reviews: Google shows '{name}' rated "
-                            f"{rating:.1f} from {count} review(s)")
-        if rating <= GOOGLE_LOW_RATING and count >= GOOGLE_MIN_RATINGS:
-            add_signal(result, "review_complaints", "Google reviews", maps_url,
-                       f"Google rating is {rating:.1f} out of 5 across {count} "
-                       f"reviews for '{name}'")
-    texts = [str((r.get("text") or {}).get("text") or "")
-             for r in (payload.get("reviews") or [])]
-    texts = [t for t in texts if t][:5]
-    if texts:
-        _scan(result, texts, "Google reviews", maps_url,
-              f"Google reviews of '{name}'", min_hits=GOOGLE_MIN_PATTERN_HITS)
-    return "ok"
+    return _judge_place(result, [place], payload)
 
 
 def gather(client: PoliteClient, result: CompanyResult) -> None:

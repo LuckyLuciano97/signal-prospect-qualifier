@@ -111,6 +111,17 @@ class BundleClient:
         robots = bundle.get("robots") or {}
         self._allows_crawl = bool(robots.get("allows_crawl", True))
         self._disallowed = [p.lower() for p in robots.get("disallowed_paths", [])]
+
+        # Raw Google Places candidates, if the crawler fetched them. They stay
+        # raw on purpose: deciding which candidate *is* this company is a
+        # judgement, and judgements belong on this side of the boundary. The
+        # crawler hands over what Google answered, never what it means.
+        # ``None`` means the bundle predates Places and the reviews module
+        # should say so rather than assume there was nothing to find.
+        google = (bundle.get("reviews") or {}).get("google")
+        self.google_candidates = (
+            list(google.get("candidates") or []) if google is not None else None)
+        self.google_error = str((google or {}).get("error") or "")
         # Same keys as PoliteClient so summary.json stays one shape.
         self.stats = {"network": 0, "cache": len(self._by_url), "retries": 0,
                       "failures": 0, "robots_disallowed": 0, "blocked_403": 0}
