@@ -244,13 +244,43 @@ that reached the output.
 
 `audit.py` reports that `manual_intake`, the hiring signals and
 `review_complaints` fired zero times across 29 companies with 27 readable
-sites. That is not a broken matcher — those sites genuinely have no public
-job boards, no downloadable intake forms, and no reachable review source. It
-is a niche mismatch, and the fix is a live review source rather than a
-reweight. Google Places is wired up (`gather/reviews.py`) and needs
-"Places API (New)" enabled on the key's project; with it, a poorly-rated
-agency with "never called me back" reviews becomes reachable evidence and the
-PASS band becomes attainable for this segment.
+sites. That is not a broken matcher: these sites have no public job boards
+and no downloadable intake forms.
+
+**The review signal is now live and still does not fire, which is the more
+interesting result.** Google Places is connected and matched 21 of 29
+companies to their own listing. Their ratings:
+
+```
+5.0  4.9  4.9  4.9  4.9  4.9  4.9  4.9  4.8  4.8  4.8
+4.6  4.5  3.8  3.0 (2 reviews)  ...
+```
+
+Small local insurance agencies are rated overwhelmingly well. Only one sits
+below the 3.7 complaint threshold, and it has two reviews — noise, not a
+pattern, so the `GOOGLE_MIN_RATINGS` floor correctly withholds it. The
+hypothesis that a neglected agency would show up as an angry review pattern
+simply does not hold for this segment. That is a finding about the market,
+not a gap in the tool, and it is the reason the run reports 0 PASS honestly
+instead of manufacturing one.
+
+The signal stays wired because it costs nothing when silent and will fire
+immediately on a segment where service complaints are public — consumer
+services, trades, clinics, anything with a real complaint tail.
+
+### Identity, not name matching
+
+The Places integration only accepts a listing that **publishes the same
+domain** as the company being scored. Name matching alone had put
+"Avanti Travel Insurance" (a UK travel insurer, 3,750 reviews) against a
+five-person Michigan agency, "Brown & Brown Insurance of Arizona" against an
+Indiana one, and "Lloyd Agencies" (5,408 reviews) against a fifteen-person
+office. None of those produced a false signal, but only because the wrong
+entities happened to be well rated: a low-rated mismatch would have offered
+another company's reviews as evidence about a prospect. A shared word in a
+business name is a coincidence; a shared domain is the company. No domain on
+the listing means no match and no signal, and the run records which
+candidates were rejected and why.
 
 ## Validation
 

@@ -39,7 +39,7 @@ import json
 import logging
 import os
 import re
-from urllib.parse import quote
+from urllib.parse import quote, urlsplit
 
 from bs4 import BeautifulSoup
 
@@ -233,16 +233,26 @@ GOOGLE_MIN_PATTERN_HITS = 2   # only ~5 texts available; 2 recurring is a patter
 GOOGLE_LOW_RATING = 3.7
 GOOGLE_MIN_RATINGS = 10
 
-GENERIC_NAME_TOKENS = {"insurance", "agency", "agencies", "group", "inc", "llc",
-                       "the", "and", "of", "company", "associates", "services"}
-
-
 def _match_place(result: CompanyResult, places: list[dict]) -> dict | None:
-    tokens = [t for t in re.split(r"[^a-z0-9]+", result.company.lower())
-              if len(t) > 2 and t not in GENERIC_NAME_TOKENS]
+    """The place must publish the same website as the company being scored.
+
+    Name matching alone is not identity, and the failure is not theoretical:
+    it put "Avanti Travel Insurance" (a UK travel insurer with 3,750 reviews)
+    against a five-person Michigan agency, "Brown & Brown Insurance of
+    Arizona" against an Indiana one, and "Lloyd Agencies" with 5,408 reviews
+    against a fifteen-person office. Any of those could have carried a poor
+    rating, and this module would have offered another company's reviews as
+    evidence about a prospect.
+
+    A shared word in a business name is a coincidence; a shared domain is the
+    company. No domain on the listing means no match, and no signal.
+    """
+    want = result.domain.removeprefix("www.").lower()
     for place in places:
-        name = str((place.get("displayName") or {}).get("text") or "").lower()
-        if any(t in name for t in tokens):
+        host = urlsplit(str(place.get("websiteUri") or "")).netloc.lower()
+        host = host.removeprefix("www.")
+        if host and (host == want or host.endswith("." + want)
+                     or want.endswith("." + host)):
             return place
     return None
 
@@ -258,18 +268,26 @@ def _google(client: PoliteClient, result: CompanyResult) -> str:
             allow_status=(200, 400, 404),
             extra_headers={
                 "X-Goog-Api-Key": api_key,
+                # websiteUri is what makes the match decisive; without it the
+                # only thing to match on is the name, which is not identity.
                 "X-Goog-FieldMask": "places.id,places.displayName,"
                                     "places.rating,places.userRatingCount,"
-                                    "places.googleMapsUri",
+                                    "places.googleMapsUri,places.websiteUri",
             })
         if resp.status != 200:
             result.notes.append(f"reviews: Google Places search answered "
                                 f"HTTP {resp.status}; skipped")
             return "unreachable"
-        place = _match_place(result, resp.json().get("places") or [])
+        candidates = resp.json().get("places") or []
+        place = _match_place(result, candidates)
         if place is None:
-            result.notes.append(f"reviews: no Google place confidently matching "
-                                f"'{result.company}'; skipped")
+            names = ", ".join(
+                f"'{(p.get('displayName') or {}).get('text', '?')}'"
+                for p in candidates[:3]) or "none"
+            result.notes.append(
+                f"reviews: Google returned {len(candidates)} place(s) for "
+                f"'{result.company}' ({names}) but none publish {result.domain}; "
+                f"skipped rather than risk another company's reviews")
             return "none-found"
         details = client.get(
             f"https://places.googleapis.com/v1/places/{place['id']}"

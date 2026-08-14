@@ -185,8 +185,21 @@ class PoliteClient:
         if host in self._blocked_hosts:
             raise HostBlocked(f"{host} previously answered 403; not asking again")
 
-        cache_id = url if json_body is None else \
-            url + "#" + json.dumps(json_body, sort_keys=True)
+        # The cache key must cover everything that changes the response. Body
+        # is obvious; headers are not, and the omission cost a debugging round:
+        # the Places FieldMask is a header, so adding a field to it produced a
+        # cache hit on the old response and the new field silently never
+        # arrived. Header values are hashed rather than stored because one of
+        # them is an API key and cache files are plain text on disk.
+        parts = [url]
+        if json_body is not None:
+            parts.append(json.dumps(json_body, sort_keys=True))
+        if extra_headers:
+            digest = hashlib.sha256(
+                json.dumps(sorted(extra_headers.items())).encode("utf-8")
+            ).hexdigest()[:16]
+            parts.append(f"headers={digest}")
+        cache_id = "#".join(parts)
         cached = self._read_cache(cache_id)
         if cached is not None:
             self.stats["cache"] += 1

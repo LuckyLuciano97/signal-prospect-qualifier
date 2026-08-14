@@ -1,5 +1,5 @@
 {
-  "finished_at": "2026-08-11 16:58 UTC",
+  "finished_at": "2026-08-14 02:52 UTC",
   "input": "input_example.csv",
   "companies": 29,
   "bands": {
@@ -20,7 +20,7 @@
     "competitive": true
   },
   "http": {
-    "network": 51,
+    "network": 50,
     "cache": 304,
     "retries": 12,
     "failures": 9,
@@ -34,5 +34,5 @@
     "input_tokens": 0,
     "output_tokens": 0
   },
-  "elapsed_seconds": 76.1
+  "elapsed_seconds": 75.7
 }
