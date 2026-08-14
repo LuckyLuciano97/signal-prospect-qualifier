@@ -76,7 +76,14 @@ class PoliteClient:
         self._blocked_hosts: set[str] = set()
         self.session = requests.Session()
         self.session.headers["User-Agent"] = config.USER_AGENT
-        self.session.headers["Accept"] = "text/html,application/json;q=0.9,*/*;q=0.8"
+        # Do NOT advertise application/json here. Some site builders honour
+        # content negotiation and answer a page request with their builder's
+        # config document - still labelled 'content-type: text/html', so
+        # nothing downstream can catch it. Two agencies in one 19-company
+        # batch were scored on a stylesheet instead of their website because
+        # of this header. The wildcard keeps the JSON APIs (Greenhouse,
+        # Lever, iTunes, Places) answering exactly as before; verified.
+        self.session.headers["Accept"] = "text/html,application/xhtml+xml,*/*;q=0.8"
         self.stats = {"network": 0, "cache": 0, "retries": 0, "failures": 0,
                       "robots_disallowed": 0, "blocked_403": 0}
 

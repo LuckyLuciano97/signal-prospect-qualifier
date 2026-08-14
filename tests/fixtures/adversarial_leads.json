@@ -5,7 +5,8 @@
     "as prospects before gather/entity.py existed; one is the control that",
     "must NOT be disqualified.",
     "Each `homepage_text` is an excerpt of the real fetched page text, so the",
-    "evidence_quote substring check is exercised against genuine copy."
+    "evidence_quote substring check is exercised against genuine copy.",
+    "Batch-3 additions (2026-08-14): three wholesalers, which the gate had no category for, and two page-builder sites that were being scored on their own stylesheet because our Accept header made them serve JSON."
   ],
   "cases": [
     {
@@ -46,6 +47,46 @@
         "prospect in the run."
       ],
       "homepage_text": "Brown & Brown Insurance Agency - Personal & Business - Auburn, IN Visit Brown & Brown Insurance Agency, Inc. on Twitter Blog Client Portal Report a Claim Request Policy Change Request Certificate Auto ID Card Pay Insurance Bill Complete Review Refer a Friend Resources Clickable Coverage Insurance Glossary FAQs Call search Menu About We're Independent Meet the Team Insurance Partners Testimonials Personal Business Contact Get Quote Insurance solutions you can depend on At Brown & Brown Insurance, we combine local service with global reach. 309 S. Jackson Street Auburn, IN 46706"
+    },
+    {
+      "company": "J.M. Wilson",
+      "domain": "jmwilson.com",
+      "expect_entity_type": "wholesaler",
+      "expect_is_target": false,
+      "homepage_text": "Formerly JM Wilson – RT Specialty Report a Claim Make a Payment Search Practices Accident & Health Casualty Cyber Environmental & Construction Professional Marine Personal Lines Professional & Executive Liability Property Surety Transactional Risk Workers’ Compensation Industries Agribusiness Aviation Construction Energy Financial Institutions Healthcare Hospitality Life Sciences Manufacturing Private Equity Public Entity Rail & Infrastructure Real Estate Retail Sharing Economy Sports & Entertainment Transportation RT Binding RT Connector News Press & Articles Ryan Specialty Blog D&O Diary Careers Contact Find a Broker or Underwriter Report a Claim RT Locations Formerly JM Wilson JM Wilson has officially joined Ryan Specialty as of July 1, 2025! Some features from the JM Wilson website will remain accessible through links on this landing page, while others will transition to RT Specialty platforms or be retired entirely. Below, you’ll find links to online quoting, and instructions for making payments and reporting claims. You can continue writing the same products with the same brokers and underwriters—now proudly under the RT Specialty banner. This includes, Brokerage , Binding Authority , Personal Lines , Transportation and Surety . The Application Library, Endorsements, and the Submit a Risk form are being discontinued or replaced. For required applications or endorsements o",
+      "was_ranked": "DISQUALIFIED as publisher - right verdict, wrong reason (a newsletter signup won over the wholesale vocabulary)"
+    },
+    {
+      "company": "Sycamore Specialty Underwriters",
+      "domain": "sycins.com",
+      "expect_entity_type": "wholesaler",
+      "expect_is_target": false,
+      "homepage_text": "Sycamore Specialty Underwriters | Specialty Insurance MGA About Us Specialty Cannabis Security Services Specialty Home Wholesale Brokerage Agent Resources Get A Quote Applications Get Appointed Forms Library Get a Quote Get a Quote Payment Sycamore is a leading provider of specialty insurance programs and wholesale insurance solutions. GET A QUOTE Specialty We help you reduce risks and prevail through unexpected events by offering specialty, industry-tailored insurance programs. Get started Wholesale Brokerage We provide wholesale brokerage expertise for accounts of any size through our network of trusted carriers. Get started Headquarters: 3001 W. Big Beaver Rd. Suite 504 Troy, MI 48084 (844) 845-9965 info@sycins.com LinkedIn Legal Information Legal Notices Privacy Policy 2026 © All rights reserved by Sycamore Specialty Underwriters. California License # 6009492 2026",
+      "was_ranked": "0% FAIL, entity_type=target (no wholesaler category existed)"
+    },
+    {
+      "company": "Specialty Brokerage Services",
+      "domain": "specialtybrokerage.com",
+      "expect_entity_type": "wholesaler",
+      "expect_is_target": false,
+      "homepage_text": "service in the business. Read More Our Testimonials I have worked in the insurance industry since 1992 and in my current agency since 2005. In that time, I have worked with various brokers but none of them have come close to providing the customer service that Specialty Brokerage has provided to us. From the broad expanse of products they offer, to the knowledge they provide when given the opportunity, there is no one better. They are also great at thinking outside of the box when looking for solutions to cover those hard to place insureds. If you are looking to establish a new broker relationship, Specialty Brokerage should be your choice, you won’t regret it. I know, we have not. Jackie B Retail agent Westerville, Ohio The team at Specialty Brokerage is prompt and thorough. I have worked with their team directly for many years and always have a quote back same day or early next which can be extremely important. Each quote we receive has the coverages requested or an explanation as to why something needs to be different. The payment processing is usually a smooth process as well. Our agency enjoys working with Specialty Brokerage. Mallory S Retail Agent Athens, Oh Follow us: Easy Links Home History Meet The Team Become An Agent Products Pay Invoice Contact Quick Links Privacy Policy Terms & Conditions Contact (800) 277-2159 info@specialtybrokerage.com Specialty Brokerage Services LLC. 393",
+      "was_ranked": "34% FAIL, entity_type=target - would have produced an opener"
+    },
+    {
+      "company": "Belt Insurance Agency",
+      "domain": "beltinsurance.com",
+      "expect_entity_type": "target",
+      "expect_is_target": true,
+      "homepage_text": "Auto Insurance - Home - Life - Business - Pataskala, OH Home Quotes Auto Insurance Quote Home Insurance Quote Life Insurance Quote Business Insurance Quote Condo Insurance Quote Renters Insurance Quote Services Make a Payment Update Contact Info Proof of Insurance Contact My Carrier Insurance Auto Insurance Home Insurance Life Insurance Business Insurance Condo Insurance Renters Insurance About Staff Directory Client Testimonials Refer a Friend Insurance Carriers Blog FAQ Legal Policies Contact Home Quotes Auto Insurance Quote Home Insurance Quote Life Insurance Quote Business Insurance Quote Condo Insurance Quote Renters Insurance Quote Services Make a Payment Update Contact Info Proof of Insurance Contact My Carrier Insurance Auto Insurance Home Insurance Life Insurance Business Insurance Condo Insurance Renters Insurance About Staff Directory Client Testimonials Refer a Friend Insurance Carriers Blog FAQ Legal Policies Contact Get in touch (740) 927-1469 service@beltinsurance.com Belt Insurance Agency Belt Insurance Agency is committed to helping people. We provide peace of mind and security for our valued clients through superior service and competitive product offerings. ​ As trusted insurance advisors, we are committed to protecting our client’s assets and hold ourselves to the highest ethical and professional standards. Get a Quote Contact Us Your Insurance Journey Start",
+      "was_ranked": "REVIEW/unclear - the gate was reading the site builder's CSS, not the page. Reads 77% PASS once the page is fetched as HTML."
+    },
+    {
+      "company": "Jensen Insurance Agency",
+      "domain": "jensenagency.com",
+      "expect_entity_type": "target",
+      "expect_is_target": true,
+      "homepage_text": "Jensen Insurance Agency | Family-Owned Insurance Experts Home About Us Our Services Auto Insurance Home Insurance Life Insurance RV, Boat, and Motorcycle Insurance Umbrella Liability Insurance Financial & Estate Planning Blog Contact Get a Quote (248) 546-9400 Home About Us Our Services Auto Insurance Home Insurance Life Insurance RV, Boat, and Motorcycle Insurance Umbrella Liability Insurance Financial & Estate Planning Blog Contact (248) 546-9400 Welcome to Jensen Insurance Agency Reliable Coverage, Neighborly Care Since 1956 Proudly Serving the Metro Detroit Area. Contact Us How We Can Support You Home Button Auto Button Life Button Financial & Estate Planning Button View All Services Generations of Care, Decades of Dedication For over 60 years, Jensen Insurance Agency has been a trusted partner in the Metro Detroit community, providing personalized insurance solutions with a commitment that’s deeply rooted in family values from Madison Heights to the city of Warren and beyond. Since our founding in 1956, we’ve built a reputation for putting our clients first, delivering tailored coverage with the integrity and attentiveness you’d expect from a local, family-owned agency. At Jensen Insurance, you’re more than just a policyholder; you’re a valued member of our community. With us, you’ll find the one-on-one attention you deserve, backed by decades of expertise and a wide range",
+      "was_ranked": "REVIEW/unclear for the same reason; evidence_quote was literally background-image:url(...)"
     }
   ]
 }

@@ -27,7 +27,18 @@ def add_signal(result: CompanyResult, type_: str, source: str, url: str, detail:
 
 
 def visible_text(html: str) -> str:
-    """Page text as a person would read it, whitespace collapsed."""
+    """Page text as a person would read it, whitespace collapsed.
+
+    A body that opens with a JSON delimiter is not a web page, whatever the
+    content-type header claims - and site builders do claim text/html while
+    returning their config document. Parsed as HTML it yields tens of
+    thousands of characters of stylesheet, which then reach the detectors and
+    the entity gate as if they were company copy. Refusing it here means the
+    company is recorded as unreadable, which is true, instead of being
+    described from its own CSS.
+    """
+    if html.lstrip()[:1] in ("{", "["):
+        return ""
     soup = BeautifulSoup(html, "html.parser")
     for tag in soup(["script", "style", "noscript", "template", "svg"]):
         tag.extract()

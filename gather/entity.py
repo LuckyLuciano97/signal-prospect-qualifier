@@ -47,6 +47,7 @@ ENTITY_TYPES = [
     "network",         # aggregator, cluster, franchise network
     "national_brand",  # multi-state/enterprise, has procurement
     "vendor",          # sells software/services into this niche
+    "wholesaler",      # MGA/wholesale broker; its customers are retail agents
     "unclear",
 ]
 
@@ -70,6 +71,10 @@ PREFILTERS = {
     "vendor": re.compile(
         r"\b(agency management system|our software|request a demo|pricing plans"
         r"|for insurance agencies\b[^.!?]{0,40}\bplatform)\b", re.I),
+    "wholesaler": re.compile(
+        r"\b(wholesale (?:insurance|broker|brokerage|distribution)"
+        r"|managing general agent|retail agents?|retail (?:agency )?partners"
+        r"|program administrator|binding authority)\b", re.I),
 }
 
 # Phrases decisive enough to skip the model entirely.
@@ -81,6 +86,15 @@ PREFILTERS = {
 # this - Underwriters Alliance was correctly disqualified but labelled an
 # association instead of a network.
 STRONG: tuple[tuple[str, re.Pattern[str]], ...] = (
+    # Wholesalers first, and for the same reason: J.M. Wilson is a wholesale
+    # brokerage whose page carries a newsletter signup, so "subscribe to" won
+    # and it was disqualified as a publisher - right answer, wrong reason.
+    # "retail agent" is the decisive tell: a wholesaler calls its customers
+    # that, a retail agency never does. "surplus lines" is deliberately
+    # absent, because retail agencies place surplus lines business too.
+    ("wholesaler", re.compile(r"\b(wholesale (?:insurance|broker|brokerage)"
+                              r"|managing general agent|retail agents?"
+                              r"|binding authority)\b", re.I)),
     ("network", re.compile(r"\b(the siaa difference|siaa|member agencies"
                            r"|benefits of membership|our network of agencies)\b", re.I)),
     ("publisher", re.compile(r"\b(media kits?|our publications|latest issue"
@@ -118,6 +132,10 @@ entity_type must be one of:
 - national_brand: a multi-state or enterprise-scale operation with formal
   procurement, judged by what the site says about its own footprint
 - vendor: sells software or services into this same niche
+- wholesaler: a wholesale broker, managing general agent or program
+  administrator whose customers are other agents, not the public. A page that
+  talks about serving "retail agents", binding authority or wholesale
+  distribution is describing this, not a retail agency.
 - unclear: the text does not settle it
 
 Rules:

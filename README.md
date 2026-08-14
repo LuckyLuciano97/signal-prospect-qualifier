@@ -268,6 +268,47 @@ The signal stays wired because it costs nothing when silent and will fire
 immediately on a segment where service complaints are public — consumer
 services, trades, clinics, anything with a real complaint tail.
 
+### The crawler asked for the wrong thing
+
+The client used to send `Accept: text/html,application/json;q=0.9,*/*;q=0.8`,
+so one client could also talk to the JSON APIs. Some site builders honour that
+negotiation and answer a page request with their builder's **config document** —
+still labelled `content-type: text/html`, so nothing downstream could catch it.
+
+The symptom was invisible until a quote gave it away. An entity-gate verdict
+came back citing `background-image:url(https://irp.cdn-website.com/...)`. Two
+of nineteen agencies in one batch were being described from their own
+stylesheet: 172 KB of HTML became 122,899 characters of "text", where a real
+page yields 1–2%. Both had been filed `unclear` and sent to REVIEW — not
+because the companies were ambiguous, but because the gate was reading CSS.
+
+Fetched as HTML, one of them scores **77% PASS** with `manual_intake` — the
+30-weight signal that had not fired once in 29 prior companies.
+
+Two changes, because either alone leaves the hole open:
+
+* the page `Accept` no longer advertises JSON (verified: the Greenhouse,
+  Lever, iTunes and Places endpoints answer identically), and
+* `visible_text()` refuses a body that opens with `{` or `[`. The
+  content-type header lies, so the body has to be trusted over the label. A
+  refused page is recorded as unreadable, which is true, rather than
+  described from its CSS.
+
+### Wholesalers are not prospects
+
+The gate knew about associations, publishers, networks, national brands and
+vendors — but had no category for a wholesale broker or MGA, whose customers
+are retail agents rather than the public. Three appeared in one batch. One
+scored 34% and would have produced an opener aimed at a firm that sells *to*
+agencies.
+
+`retail agent` is the decisive tell: a wholesaler calls its customers that, a
+retail agency never does. `surplus lines` is deliberately **not** in the
+pattern — retail agencies place surplus lines business through wholesalers all
+the time, and disqualifying a real prospect is the more expensive mistake.
+The pattern was tested against all nineteen pages before it shipped: it caught
+all three wholesalers and fired on none of the ten control agencies.
+
 ### Identity, not name matching
 
 The Places integration only accepts a listing that **publishes the same
